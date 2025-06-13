@@ -69,3 +69,11 @@ input {
     margin: 5px 0 0 0;
     color: #036497;
 }
+.credit {
+    position: absolute;
+    bottom: 20px;
+    text-align: center;
+    width: 100%;
+    color: #999;
+    font-size: 14px;
+}
