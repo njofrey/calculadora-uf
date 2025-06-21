@@ -10,22 +10,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="card">
-        <h1>Calculadora UF a CLP</h1>
-        
-        <p id="uf-display">Cargando valor de la UF...</p>
-        
-        <div class="input-group">
-            <label for="uf-input">Cantidad de UF</label>
-            <input type="number" id="uf-input" placeholder="Ej: 1">
-        </div>
+    <div class="main-container">
+        <div class="card">
+            <h1>Calculadora UF a CLP</h1>
+            
+            <div id="uf-display" class="uf-display-box">Cargando valor de la UF...</div>
+            
+            <div class="input-group">
+                <label for="uf-input">Cantidad de UF</label>
+                <input type="number" id="uf-input" placeholder="Ej: 1">
+            </div>
 
-        <div class="result">
-            <h2>Total en CLP:</h2>
-            <p id="clp-result">$0</p>
+            <div class="result">
+                <h2>Total en CLP:</h2>
+                <p id="clp-result">$0</p>
+            </div>
         </div>
+        
+        <p class="credit">Hecho con ❤️ por Nicolás Jofré</p>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
 </html>
