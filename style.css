@@ -29,6 +29,12 @@ p {
     margin-bottom: 20px;
 }
 
+/* Estilo para el display de la UF */
+#uf-display {
+    color: #555;
+    font-size: 14px;
+}
+
 .input-group {
     text-align: left;
     margin-bottom: 20px;
@@ -47,7 +53,7 @@ input {
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 18px;
-    box-sizing: border-box; /* Importante para que el padding no afecte el ancho */
+    box-sizing: border-box;
 }
 
 .result {
@@ -68,12 +74,10 @@ input {
     font-weight: 700;
     margin: 5px 0 0 0;
     color: #036497;
+    cursor: pointer; /* AÑADIDO: Indica que el resultado es clickeable */
+    transition: background-color 0.2s ease;
 }
-.credit {
-    position: absolute;
-    bottom: 20px;
-    text-align: center;
-    width: 100%;
-    color: #999;
-    font-size: 14px;
+
+.result p:hover {
+    background-color: rgba(255,255,255,0.2); /* Efecto visual al pasar el mouse */
 }
