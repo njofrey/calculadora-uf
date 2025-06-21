@@ -1,47 +1,83 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const ufValueElement = document.getElementById('uf-value');
-    const ufInputElement = document.getElementById('uf-input');
-    const clpResultElement = document.getElementById('clp-result');
-    let ufRate = 0;
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    color: #333;
+}
 
-    // Función para obtener el valor de la UF desde la API
-    async function getUfValue() {
-        try {
-            const response = await fetch('https://mindicador.cl/api/uf');
-            if (!response.ok) throw new Error('No se pudo obtener el valor de la UF.');
-            const data = await response.json();
-            ufRate = data.serie[0].valor;
-            
-            // Formatear para mostrar en la UI
-            const formattedUf = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(ufRate);
-            ufValueElement.textContent = formattedUf;
+.card {
+    background-color: white;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    max-width: 350px;
+    width: 100%;
+}
 
-            // Disparar el cálculo inicial si hay un valor en el input
-            calculate();
+h1 {
+    font-size: 24px;
+    margin-top: 0;
+}
 
-        } catch (error) {
-            ufValueElement.textContent = 'Error al cargar';
-            console.error(error);
-        }
-    }
+p {
+    color: #666;
+    margin-bottom: 20px;
+}
 
-    // Función para calcular y mostrar el resultado
-    function calculate() {
-        if (ufRate === 0) return; // No calcular si aún no tenemos el valor de la UF
+/* Estilo para el display de la UF */
+#uf-display {
+    color: #555;
+    font-size: 14px;
+}
 
-        const ufAmount = parseFloat(ufInputElement.value) || 0;
-        const totalClp = ufAmount * ufRate;
-        
-        // Formatear el resultado en pesos chilenos
-        clpResultElement.textContent = new Intl.NumberFormat('es-CL', {
-            style: 'currency',
-            currency: 'CLP',
-        }).format(totalClp);
-    }
+.input-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
 
-    // Escuchar cambios en el input para recalcular en tiempo real
-    ufInputElement.addEventListener('input', calculate);
+label {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
 
-    // Cargar el valor de la UF al iniciar la página
-    getUfValue();
-});
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 18px;
+    box-sizing: border-box;
+}
+
+.result {
+    background-color: #e6f7ff;
+    border: 1px solid #91d5ff;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.result h2 {
+    font-size: 16px;
+    margin: 0;
+    color: #036497;
+}
+
+.result p {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 5px 0 0 0;
+    color: #036497;
+    cursor: pointer; /* AÑADIDO: Indica que el resultado es clickeable */
+    transition: background-color 0.2s ease;
+}
+
+.result p:hover {
+    background-color: rgba(255,255,255,0.2); /* Efecto visual al pasar el mouse */
+}
