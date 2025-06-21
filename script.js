@@ -1,83 +1,79 @@
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: #f0f2f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    color: #333;
-}
+document.addEventListener('DOMContentLoaded', () => {
+    // Referencias a los elementos del HTML
+    const ufDisplayElement = document.getElementById('uf-display');
+    const ufInputElement = document.getElementById('uf-input');
+    const clpResultElement = document.getElementById('clp-result');
+    let ufRate = 0;
 
-.card {
-    background-color: white;
-    padding: 30px 40px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    text-align: center;
-    max-width: 350px;
-    width: 100%;
-}
+    // --- FUNCIÓN PARA OBTENER EL VALOR DE LA UF (ACTUALIZADA CON FECHA) ---
+    async function getUfValue() {
+        try {
+            const response = await fetch('https://mindicador.cl/api/uf');
+            if (!response.ok) throw new Error('No se pudo obtener el valor de la UF.');
+            
+            const data = await response.json();
+            ufRate = data.serie[0].valor;
+            
+            // 1. Lógica para mostrar la fecha
+            const today = new Date();
+            const dateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+            const formattedDate = today.toLocaleDateString('es-CL', dateOptions);
+            const formattedUf = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(ufRate);
+            
+            // Se crea el texto con la fecha y el valor
+            ufDisplayElement.innerHTML = `UF hoy (${formattedDate}): <strong>${formattedUf}</strong>`;
 
-h1 {
-    font-size: 24px;
-    margin-top: 0;
-}
+            calculate();
 
-p {
-    color: #666;
-    margin-bottom: 20px;
-}
+        } catch (error) {
+            ufDisplayElement.textContent = 'Error al cargar valor de la UF.';
+            console.error(error);
+        }
+    }
 
-/* Estilo para el display de la UF */
-#uf-display {
-    color: #555;
-    font-size: 14px;
-}
+    // --- FUNCIÓN PARA CALCULAR Y MOSTRAR EL RESULTADO (ACTUALIZADA) ---
+    function calculate() {
+        if (ufRate === 0) return;
 
-.input-group {
-    text-align: left;
-    margin-bottom: 20px;
-}
+        const ufAmount = parseFloat(ufInputElement.value) || 0;
+        const totalClp = ufAmount * ufRate;
+        
+        // Formatear el resultado en pesos chilenos
+        clpResultElement.textContent = new Intl.NumberFormat('es-CL', {
+            style: 'currency',
+            currency: 'CLP',
+            maximumFractionDigits: 0 // Mostramos el CLP como entero
+        }).format(totalClp);
+        
+        // Guardamos el valor numérico en el elemento para poder copiarlo después
+        clpResultElement.dataset.rawValue = totalClp;
+    }
 
-label {
-    display: block;
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 8px;
-}
+    // --- 2. NUEVA FUNCIÓN PARA COPIAR AL PORTAPAPELES ---
+    clpResultElement.addEventListener('click', () => {
+        const rawValue = clpResultElement.dataset.rawValue;
+        if (!rawValue) return; // No hacer nada si no hay valor
 
-input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 18px;
-    box-sizing: border-box;
-}
+        // Copiamos el número entero
+        const numberToCopy = parseInt(rawValue, 10).toString();
 
-.result {
-    background-color: #e6f7ff;
-    border: 1px solid #91d5ff;
-    border-radius: 8px;
-    padding: 15px;
-}
+        navigator.clipboard.writeText(numberToCopy)
+            .then(() => {
+                // Feedback visual para el usuario
+                const originalText = clpResultElement.textContent;
+                clpResultElement.textContent = '¡Copiado!';
+                setTimeout(() => {
+                    clpResultElement.textContent = originalText;
+                }, 1200);
+            })
+            .catch(err => {
+                console.error('Error al copiar el texto: ', err);
+            });
+    });
 
-.result h2 {
-    font-size: 16px;
-    margin: 0;
-    color: #036497;
-}
+    // Escuchar cambios en el input para recalcular
+    ufInputElement.addEventListener('input', calculate);
 
-.result p {
-    font-size: 28px;
-    font-weight: 700;
-    margin: 5px 0 0 0;
-    color: #036497;
-    cursor: pointer; /* AÑADIDO: Indica que el resultado es clickeable */
-    transition: background-color 0.2s ease;
-}
-
-.result p:hover {
-    background-color: rgba(255,255,255,0.2); /* Efecto visual al pasar el mouse */
-}
+    // Cargar el valor de la UF al iniciar la página
+    getUfValue();
+});
