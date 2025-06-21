@@ -4,9 +4,20 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
     color: #333;
+    padding: 20px 10px;
+    box-sizing: border-box;
+}
+
+/* Contenedor principal para centrar todo */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 
 .card {
@@ -29,10 +40,20 @@ p {
     margin-bottom: 20px;
 }
 
-/* Estilo para el display de la UF */
-#uf-display {
-    color: #555;
-    font-size: 14px;
+/* 1. Estilos para el nuevo formato de fecha/UF */
+.uf-display-box {
+    margin-bottom: 20px;
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.uf-display-box .uf-date {
+    display: block;
+    font-size: 12px;
+    font-style: italic;
+    color: #888;
+    margin-top: 4px;
 }
 
 .input-group {
@@ -74,10 +95,18 @@ input {
     font-weight: 700;
     margin: 5px 0 0 0;
     color: #036497;
-    cursor: pointer; /* AÑADIDO: Indica que el resultado es clickeable */
+    cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
 .result p:hover {
-    background-color: rgba(255,255,255,0.2); /* Efecto visual al pasar el mouse */
+    background-color: rgba(255,255,255,0.2);
+}
+
+/* Estilo para el footer restaurado */
+.credit {
+    text-align: center;
+    margin-top: 20px;
+    color: #999;
+    font-size: 12px;
 }
