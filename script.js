@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const clpResultElement = document.getElementById('clp-result');
     let ufRate = 0;
 
-    // --- FUNCIÓN PARA OBTENER EL VALOR DE LA UF (ACTUALIZADA CON FECHA) ---
+    // --- FUNCIÓN PARA OBTENER EL VALOR DE LA UF (ACTUALIZADA CON NUEVO FORMATO) ---
     async function getUfValue() {
         try {
             const response = await fetch('https://mindicador.cl/api/uf');
@@ -14,14 +14,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             ufRate = data.serie[0].valor;
             
-            // 1. Lógica para mostrar la fecha
+            // 1. Lógica para mostrar la fecha en el formato solicitado
             const today = new Date();
             const dateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
             const formattedDate = today.toLocaleDateString('es-CL', dateOptions);
             const formattedUf = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(ufRate);
             
-            // Se crea el texto con la fecha y el valor
-            ufDisplayElement.innerHTML = `UF hoy (${formattedDate}): <strong>${formattedUf}</strong>`;
+            // Se crea el HTML con la nueva estructura
+            const ufDisplayHtml = `
+                <span>UF hoy = <strong>${formattedUf}</strong></span>
+                <div class="uf-date">${formattedDate}</div>
+            `;
+            ufDisplayElement.innerHTML = ufDisplayHtml;
 
             calculate();
 
@@ -31,37 +35,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- FUNCIÓN PARA CALCULAR Y MOSTRAR EL RESULTADO (ACTUALIZADA) ---
+    // --- FUNCIÓN PARA CALCULAR Y MOSTRAR EL RESULTADO ---
     function calculate() {
         if (ufRate === 0) return;
 
         const ufAmount = parseFloat(ufInputElement.value) || 0;
         const totalClp = ufAmount * ufRate;
         
-        // Formatear el resultado en pesos chilenos
         clpResultElement.textContent = new Intl.NumberFormat('es-CL', {
             style: 'currency',
             currency: 'CLP',
-            maximumFractionDigits: 0 // Mostramos el CLP como entero
+            maximumFractionDigits: 0
         }).format(totalClp);
         
-        // Guardamos el valor numérico en el elemento para poder copiarlo después
         clpResultElement.dataset.rawValue = totalClp;
     }
 
-    // --- 2. NUEVA FUNCIÓN PARA COPIAR AL PORTAPAPELES ---
+    // --- FUNCIÓN PARA COPIAR (MENSAJE CORREGIDO) ---
     clpResultElement.addEventListener('click', () => {
         const rawValue = clpResultElement.dataset.rawValue;
-        if (!rawValue) return; // No hacer nada si no hay valor
+        if (!rawValue) return;
 
-        // Copiamos el número entero
         const numberToCopy = parseInt(rawValue, 10).toString();
 
         navigator.clipboard.writeText(numberToCopy)
             .then(() => {
-                // Feedback visual para el usuario
                 const originalText = clpResultElement.textContent;
-                clpResultElement.textContent = '¡Copiado!';
+                // 2. Mensaje de copiado corregido
+                clpResultElement.textContent = 'Copiado!';
                 setTimeout(() => {
                     clpResultElement.textContent = originalText;
                 }, 1200);
