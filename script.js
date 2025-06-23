@@ -79,4 +79,3 @@ document.addEventListener('DOMContentLoaded', () => {
     copyIconContainer.innerHTML = iconCopy; // Poner el ícono de copiar al inicio
     getUfValue();
 });
-
