@@ -3,27 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora UF a CLP</title>
+    
+    <!-- 2. Meta Tags y Favicon añadidos -->
+    <title>Calculadora UF a CLP | Rápida y Precisa</title>
+    <meta name="description" content="La forma más fácil y rápida de convertir UF a Pesos Chilenos (CLP) con el valor del día. Incluye fecha y función de copiado.">
+    
+    <meta property="og:title" content="Calculadora UF a CLP">
+    <meta property="og:description" content="Convierte UF a CLP al instante con el valor actualizado.">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>">
+
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="main-container">
         <div class="card">
             <h1>Calculadora UF a CLP</h1>
             
-            <div id="uf-display" class="uf-display-box">Cargando valor de la UF...</div>
+            <div id="uf-display" class="uf-display-box">Cargando valor...</div>
             
             <div class="input-group">
                 <label for="uf-input">Cantidad de UF</label>
                 <input type="number" id="uf-input" placeholder="Ej: 1">
             </div>
 
-            <div class="result">
-                <h2>Total en CLP:</h2>
-                <p id="clp-result">$0</p>
+            <!-- 1. Caja de resultado rediseñada con espacio para el ícono -->
+            <div class="result" id="result-box">
+                <div class="result-text">
+                    <h2>Total en CLP:</h2>
+                    <p id="clp-result">$0</p>
+                </div>
+                <div class="copy-icon" id="copy-icon-container">
+                    <!-- El ícono se insertará aquí con JavaScript -->
+                </div>
             </div>
         </div>
         
