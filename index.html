@@ -12,6 +12,9 @@
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>">
 
+    <!-- Librería del Nuevo Calendario -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/css/datepicker-bs5.min.css">
+    
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,17 +25,14 @@
         <div class="card">
             <h1>Calculadora UF a CLP</h1>
             
-            <div id="uf-display" class="uf-display-box">
-                <!-- El valor de la UF se carga aquí -->
-            </div>
+            <div id="uf-display" class="uf-display-box"></div>
             
-            <!-- Link para mostrar/ocultar el calendario -->
             <button id="toggle-datepicker-btn" class="toggle-datepicker">Consultar otra fecha</button>
 
-            <!-- Contenedor del calendario, oculto por defecto -->
             <div id="datepicker-container" class="datepicker-wrapper">
                 <div class="input-group">
-                    <input type="date" id="date-picker">
+                    <!-- El input ahora es de tipo 'text' para ser controlado por la librería -->
+                    <input type="text" id="date-picker" placeholder="Selecciona una fecha">
                 </div>
             </div>
 
@@ -53,6 +53,9 @@
         <p class="credit">Hecho con ❤️ por Nicolás Jofré</p>
     </div>
 
+    <!-- Scripts de la Librería y de la App -->
+    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/locales/es.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
