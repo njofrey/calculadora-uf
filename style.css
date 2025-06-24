@@ -1,4 +1,4 @@
-/* --- Estilos v3 para Calculadora UF (con Calendario Profesional) --- */
+/* --- Estilos v3.1 para Calculadora UF (con Calendario Profesional) --- */
 :root {
     --card-background: white;
     --body-background: #f4f5f7;
@@ -94,24 +94,6 @@ h1 {
     max-height: 100px;
 }
 
-/* --- Estilos para el nuevo calendario --- */
-.input-group input#date-picker {
-    cursor: pointer;
-    padding-right: 40px; /* Espacio para el ícono */
-}
-
-/* Variables para personalizar el calendario */
-.datepicker {
-    --bs-primary: var(--accent-text);
-    --bs-primary-rgb: 12, 74, 110;
-    --bs-body-bg: var(--card-background);
-    --bs-body-color: var(--text-primary);
-    --bs-secondary-color: var(--text-secondary);
-    --bs-border-color: var(--border-color);
-}
-/* Fin de estilos del calendario */
-
-
 .input-group label {
     display: block;
     font-size: 14px;
@@ -131,7 +113,9 @@ h1 {
     background-color: var(--body-background);
     color: var(--text-primary);
 }
-
+.input-group input#date-picker {
+    cursor: pointer;
+}
 
 .result {
     margin-top: 25px;
@@ -154,7 +138,7 @@ h1 {
 }
 @keyframes flash {
     0% { background-color: var(--accent-bg); }
-    50% { background-color: #a7f3d0; }
+    50% { background-color: var(--success-color); opacity: 0.5; }
     100% { background-color: var(--accent-bg); }
 }
 
@@ -168,11 +152,9 @@ h1 {
     color: var(--accent-text);
     transition: all 0.2s ease;
 }
-/* Estilo para el check verde */
 .copy-icon svg.check {
     color: var(--success-color);
 }
-
 
 .credit {
     text-align: center;
@@ -180,4 +162,44 @@ h1 {
     color: var(--text-secondary);
     font-size: 12px;
     opacity: 0.8;
+}
+
+/* --- ESTILOS PROFESIONALES PARA EL CALENDARIO --- */
+.datepicker {
+    --bs-primary-rgb: 12, 74, 110;
+    --bs-body-bg: var(--card-background);
+    --bs-body-color: var(--text-primary);
+    --bs-secondary-color: var(--text-secondary);
+    --bs-border-color: var(--border-color);
+    --bs-border-radius: 1rem;
+    --bs-highlight-bg: var(--accent-bg);
+    border: 1px solid var(--border-color) !important;
+}
+.datepicker-header .datepicker-title {
+    background-color: var(--body-background);
+    font-weight: 500;
+}
+.datepicker-header .btn {
+    border-radius: 0.5rem;
+    transition: background-color 0.2s ease;
+}
+.datepicker-header .btn:hover {
+    background-color: var(--accent-bg);
+}
+.datepicker-footer {
+    background-color: var(--body-background);
+}
+.datepicker-footer .btn:hover {
+    background-color: var(--accent-bg);
+}
+.datepicker .day.today, .datepicker .day.today:hover {
+    background-color: var(--accent-bg);
+    color: var(--accent-text);
+}
+.datepicker .day.focused, .datepicker .day:hover {
+    background-color: var(--body-background);
+    border-radius: 0.5rem;
+}
+.datepicker-dropdown {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
