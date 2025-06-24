@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyIconContainer = document.getElementById('copy-icon-container');
     let ufRate = 0;
 
-    // 1. Íconos como SVG para control total
+    // Íconos como SVG para control total
     const iconCopy = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m9.75 11.625-3.75-3.75" /></svg>`;
     const iconCheck = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>`;
 
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resultBox.dataset.rawValue = totalClp;
     }
 
-    // --- 3. LÓGICA DE COPIADO MEJORADA ---
+    // --- LÓGICA DE COPIADO MEJORADA ---
     resultBox.addEventListener('click', () => {
         const rawValue = resultBox.dataset.rawValue;
         if (!rawValue) return;
