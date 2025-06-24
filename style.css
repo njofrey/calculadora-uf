@@ -178,6 +178,7 @@ h1 {
 }
 .datepicker-header .datepicker-title {
     background-color: var(--body-background);
+    border-radius: 0.5rem;
     font-weight: 500;
 }
 .datepicker-header .btn {
@@ -185,7 +186,7 @@ h1 {
     transition: background-color 0.2s ease;
 }
 .datepicker-header .btn:hover {
-    background-color: var(--accent-bg);
+    background-color: var(--body-background);
 }
 .datepicker-footer {
     background-color: var(--body-background);
@@ -203,4 +204,18 @@ h1 {
 }
 .datepicker-dropdown {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+/* Reemplazo de botones anticuados por íconos SVG modernos */
+.datepicker-header .btn.prev-btn::after {
+    content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="%236b7280"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>');
+    width: 16px;
+    height: 16px;
+}
+.datepicker-header .btn.next-btn::after {
+    content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="%236b7280"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>');
+    width: 16px;
+    height: 16px;
+}
+.datepicker-header .btn.prev-btn, .datepicker-header .btn.next-btn {
+    padding: 0.5rem;
 }
