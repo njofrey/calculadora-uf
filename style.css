@@ -94,7 +94,6 @@ h1 {
     color: var(--text-primary);
 }
 
-/* --- Caja de resultado rediseñada --- */
 .result {
     display: flex;
     align-items: center;
@@ -110,12 +109,12 @@ h1 {
     transform: scale(1.02);
     box-shadow: 0 4px 15px rgba(0, 122, 255, 0.1);
 }
-.result.copied { /* 3. Estilo para feedback visual al copiar */
+.result.copied {
     animation: flash 0.5s ease;
 }
 @keyframes flash {
     0% { background-color: var(--accent-bg); }
-    50% { background-color: #a7f3d0; } /* Un verde menta para el flash */
+    50% { background-color: #a7f3d0; } 
     100% { background-color: var(--accent-bg); }
 }
 
@@ -135,7 +134,6 @@ h1 {
     color: var(--accent-text);
 }
 
-/* --- Estilos para el ícono de copiar --- */
 .copy-icon svg {
     width: 24px;
     height: 24px;
