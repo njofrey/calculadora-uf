@@ -1,112 +1,183 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // --- Referencias a los elementos del DOM ---
-    const ufDisplayElement = document.getElementById('uf-display');
-    const ufInputElement = document.getElementById('uf-input');
-    const datePickerEl = document.getElementById('date-picker');
-    const toggleBtn = document.getElementById('toggle-datepicker-btn');
-    const datepickerContainer = document.getElementById('datepicker-container');
-    const clpResultElement = document.getElementById('clp-result');
-    const resultBox = document.getElementById('result-box');
-    const copyIconContainer = document.getElementById('copy-icon-container');
-    let ufRate = 0;
+/* --- Estilos v3 para Calculadora UF (con Calendario Profesional) --- */
+:root {
+    --card-background: white;
+    --body-background: #f4f5f7;
+    --text-primary: #171717;
+    --text-secondary: #6b7280;
+    --border-color: #e5e7eb;
+    --accent-bg: #e0f2fe;
+    --accent-text: #0c4a6e;
+    --accent-border: #7dd3fc;
+    --success-color: #10b981;
+}
 
-    // --- Íconos SVG ---
-    const iconCopy = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m9.75 11.625-3.75-3.75" /></svg>`;
-    const iconCheck = `<svg class="check" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>`;
-
-    // --- Inicialización del Calendario Profesional ---
-    const datepicker = new Datepicker(datePickerEl, {
-        language: 'es',
-        autohide: true,
-        todayHighlight: true,
-        maxDate: new Date(), // No se pueden seleccionar fechas futuras
-        format: 'dd/mm/yyyy',
-    });
-
-    // --- Lógica de la App ---
-    async function getUfValue(date = null) {
-        let apiUrl = 'https://mindicador.cl/api/uf';
-        let isToday = true;
-        
-        if (date) {
-            // Formato DD-MM-YYYY que requiere la API
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const year = date.getFullYear();
-            apiUrl += `/${day}-${month}-${year}`;
-            isToday = false;
-        }
-        
-        ufDisplayElement.innerHTML = 'Cargando...';
-        try {
-            const response = await fetch(apiUrl);
-            if (!response.ok) throw new Error('No hay datos para esta fecha.');
-            const data = await response.json();
-            if (data.serie.length === 0) throw new Error('No hay valor para la fecha seleccionada.');
-
-            ufRate = data.serie[0].valor;
-            const fetchedDate = new Date(data.serie[0].fecha);
-            
-            const dateOptions = { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' };
-            const formattedDate = fetchedDate.toLocaleDateString('es-CL', dateOptions);
-            const formattedUf = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(ufRate);
-            
-            const ufDisplayHtml = `<span>UF ${isToday ? 'hoy' : 'el'} = <strong>${formattedUf}</strong></span><div class="uf-date">${formattedDate}</div>`;
-            ufDisplayElement.innerHTML = ufDisplayHtml;
-
-            calculate();
-        } catch (error) {
-            ufDisplayElement.innerHTML = `<span style="color: #ef4444;">${error.message}</span>`;
-            ufRate = 0;
-            calculate();
-        }
+@media (prefers-color-scheme: dark) {
+    :root {
+        --card-background: #1f2937;
+        --body-background: #111827;
+        --text-primary: #f9fafb;
+        --text-secondary: #9ca3af;
+        --border-color: #374151;
+        --accent-bg: #0c4a6e;
+        --accent-text: #e0f2fe;
+        --accent-border: #0369a1;
+        --success-color: #34d399;
     }
+}
 
-    function calculate() {
-        if (ufRate === 0) {
-            clpResultElement.textContent = '$0';
-            resultBox.dataset.rawValue = '0';
-            return;
-        }
-        const ufAmount = parseFloat(ufInputElement.value) || 0;
-        const totalClp = ufAmount * ufRate;
-        clpResultElement.textContent = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(totalClp);
-        resultBox.dataset.rawValue = totalClp;
-    }
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--body-background);
+    color: var(--text-primary);
+    margin: 0;
+    padding: 20px 10px;
+    box-sizing: border-box;
+}
 
-    // --- Event Listeners ---
-    resultBox.addEventListener('click', () => {
-        const rawValue = resultBox.dataset.rawValue;
-        if (!rawValue || parseFloat(rawValue) === 0) return;
-        const numberToCopy = parseInt(rawValue, 10).toString();
-        navigator.clipboard.writeText(numberToCopy).then(() => {
-            copyIconContainer.innerHTML = iconCheck;
-            resultBox.classList.add('copied');
-            setTimeout(() => {
-                copyIconContainer.innerHTML = iconCopy;
-                resultBox.classList.remove('copied');
-            }, 1200);
-        });
-    });
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 100dvh;
+}
 
-    datePickerEl.addEventListener('changeDate', (event) => {
-        getUfValue(event.detail.date);
-        datepicker.hide();
-    });
+.card {
+    background-color: var(--card-background);
+    padding: 32px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+    text-align: center;
+    max-width: 380px;
+    width: 100%;
+    box-sizing: border-box;
+}
 
-    toggleBtn.addEventListener('click', () => {
-        const isVisible = datepickerContainer.classList.toggle('visible');
-        toggleBtn.textContent = isVisible ? 'Ocultar calendario' : 'Consultar otra fecha';
-        if (!isVisible) {
-            datepicker.setDate(undefined); // Limpiar la fecha
-            getUfValue(); // Volver al valor de hoy
-        }
-    });
+h1 {
+    font-size: 26px;
+    margin: 0 0 15px 0;
+}
 
-    ufInputElement.addEventListener('input', calculate);
-    ufInputElement.addEventListener('focus', () => ufInputElement.select()); // Seleccionar texto al hacer foco
+.uf-display-box {
+    margin-bottom: 10px;
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 16px;
+}
+.uf-display-box .uf-date {
+    display: block;
+    font-size: 12px;
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
 
-    // --- Inicialización ---
-    copyIconContainer.innerHTML = iconCopy;
-    getUfValue(); // Cargar valor de hoy al iniciar
-});
+.toggle-datepicker {
+    background: none;
+    border: none;
+    color: var(--accent-text);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 5px;
+    text-decoration: underline;
+    margin-bottom: 15px;
+}
+
+.datepicker-wrapper {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out;
+}
+.datepicker-wrapper.visible {
+    max-height: 100px;
+}
+
+/* --- Estilos para el nuevo calendario --- */
+.input-group input#date-picker {
+    cursor: pointer;
+    padding-right: 40px; /* Espacio para el ícono */
+}
+
+/* Variables para personalizar el calendario */
+.datepicker {
+    --bs-primary: var(--accent-text);
+    --bs-primary-rgb: 12, 74, 110;
+    --bs-body-bg: var(--card-background);
+    --bs-body-color: var(--text-primary);
+    --bs-secondary-color: var(--text-secondary);
+    --bs-border-color: var(--border-color);
+}
+/* Fin de estilos del calendario */
+
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    text-align: left;
+}
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 20px;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--body-background);
+    color: var(--text-primary);
+}
+
+
+.result {
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-radius: 16px;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.result:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px rgba(0, 122, 255, 0.1);
+}
+.result.copied {
+    animation: flash 0.5s ease;
+}
+@keyframes flash {
+    0% { background-color: var(--accent-bg); }
+    50% { background-color: #a7f3d0; }
+    100% { background-color: var(--accent-bg); }
+}
+
+.result-text { text-align: left; }
+.result-text h2 { font-size: 16px; margin: 0; color: var(--accent-text); font-weight: 500; }
+.result-text p { font-size: 28px; font-weight: 700; margin: 2px 0 0 0; color: var(--accent-text); }
+
+.copy-icon svg {
+    width: 24px;
+    height: 24px;
+    color: var(--accent-text);
+    transition: all 0.2s ease;
+}
+/* Estilo para el check verde */
+.copy-icon svg.check {
+    color: var(--success-color);
+}
+
+
+.credit {
+    text-align: center;
+    margin-top: 25px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    opacity: 0.8;
+}
