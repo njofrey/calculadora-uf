@@ -166,6 +166,7 @@ h1 {
 
 /* --- ESTILOS PROFESIONALES PARA EL CALENDARIO --- */
 .datepicker {
+    --bs-primary: var(--accent-text);
     --bs-primary-rgb: 12, 74, 110;
     --bs-body-bg: var(--card-background);
     --bs-body-color: var(--text-primary);
