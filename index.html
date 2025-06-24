@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Meta Tags y Favicon añadidos -->
     <title>Calculadora UF a CLP | Rápida y Precisa</title>
-    <meta name="description" content="La forma más fácil y rápida de convertir UF a Pesos Chilenos (CLP) con el valor del día. Incluye fecha y función de copiado.">
+    <meta name="description" content="La forma más fácil y rápida de convertir UF a Pesos Chilenos (CLP) con el valor del día o de fechas pasadas.">
     
     <meta property="og:title" content="Calculadora UF a CLP">
-    <meta property="og:description" content="Convierte UF a CLP al instante con el valor actualizado.">
+    <meta property="og:description" content="Convierte UF a CLP al instante con el valor actualizado del día o de fechas históricas.">
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>">
 
@@ -29,8 +28,13 @@
                 <label for="uf-input">Cantidad de UF</label>
                 <input type="number" id="uf-input" placeholder="Ej: 1">
             </div>
+            
+            <!-- CALENDARIO AÑADIDO AQUÍ 👇 -->
+            <div class="input-group date-picker-group">
+                <label for="date-picker">O consultar UF en otra fecha</label>
+                <input type="date" id="date-picker">
+            </div>
 
-            <!-- Caja de resultado rediseñada con espacio para el ícono -->
             <div class="result" id="result-box">
                 <div class="result-text">
                     <h2>Total en CLP:</h2>
