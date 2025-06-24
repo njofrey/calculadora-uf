@@ -73,7 +73,7 @@ h1 {
 
 .input-group {
     text-align: left;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 .input-group label {
     display: block;
@@ -92,6 +92,27 @@ h1 {
     font-family: 'Inter', sans-serif;
     background-color: var(--body-background);
     color: var(--text-primary);
+}
+
+/* --- Estilos para el calendario --- */
+.date-picker-group {
+    margin-bottom: 25px;
+}
+input[type="date"] {
+    -webkit-appearance: none;
+    appearance: none;
+    position: relative;
+    cursor: pointer;
+}
+/* Estilo del ícono del calendario para navegadores Webkit (Chrome, Safari) */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="%239ca3af"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0h18" /></svg>');
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .result {
@@ -114,7 +135,7 @@ h1 {
 }
 @keyframes flash {
     0% { background-color: var(--accent-bg); }
-    50% { background-color: #a7f3d0; } 
+    50% { background-color: #a7f3d0; }
     100% { background-color: var(--accent-bg); }
 }
 
