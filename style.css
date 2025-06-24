@@ -58,7 +58,7 @@ h1 {
 }
 
 .uf-display-box {
-    margin-bottom: 25px;
+    margin-bottom: 10px; /* Reducido para dar espacio al nuevo botón */
     color: var(--text-primary);
     font-weight: 500;
     font-size: 16px;
@@ -71,18 +71,61 @@ h1 {
     margin-top: 4px;
 }
 
-.input-group {
-    text-align: left;
-    margin-bottom: 20px;
+/* --- Estilos para el nuevo botón y el desplegable del calendario --- */
+.toggle-datepicker {
+    background: none;
+    border: none;
+    color: var(--accent-text);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 5px;
+    text-decoration: underline;
+    margin-bottom: 15px;
 }
+
+.datepicker-wrapper {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out;
+}
+
+.datepicker-wrapper.visible {
+    max-height: 100px; /* Altura suficiente para mostrar el input */
+}
+
+input[type="date"] {
+    -webkit-appearance: none;
+    appearance: none;
+    position: relative;
+    cursor: pointer;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 16px; /* Ajustado */
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--body-background);
+    color: var(--text-primary);
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="%239ca3af"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0h18" /></svg>');
+    width: 20px;
+    height: 20px;
+}
+/* --- Fin de estilos del calendario --- */
+
+
 .input-group label {
     display: block;
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 8px;
     color: var(--text-secondary);
+    text-align: left;
 }
-.input-group input {
+.input-group input[type="number"] {
     width: 100%;
     padding: 12px;
     border: 1px solid var(--border-color);
@@ -94,28 +137,8 @@ h1 {
     color: var(--text-primary);
 }
 
-/* --- Estilos para el calendario --- */
-.date-picker-group {
-    margin-bottom: 25px;
-}
-input[type="date"] {
-    -webkit-appearance: none;
-    appearance: none;
-    position: relative;
-    cursor: pointer;
-}
-/* Estilo del ícono del calendario para navegadores Webkit (Chrome, Safari) */
-input[type="date"]::-webkit-calendar-picker-indicator {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="%239ca3af"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0h18" /></svg>');
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
 .result {
+    margin-top: 25px;
     display: flex;
     align-items: center;
     justify-content: space-between;
