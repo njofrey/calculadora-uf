@@ -1,4 +1,4 @@
-/* --- Estilos v2.1 para Calculadora UF --- */
+/* --- Estilos v3 para Calculadora UF (con Calendario Profesional) --- */
 :root {
     --card-background: white;
     --body-background: #f4f5f7;
@@ -8,6 +8,7 @@
     --accent-bg: #e0f2fe;
     --accent-text: #0c4a6e;
     --accent-border: #7dd3fc;
+    --success-color: #10b981;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,6 +21,7 @@
         --accent-bg: #0c4a6e;
         --accent-text: #e0f2fe;
         --accent-border: #0369a1;
+        --success-color: #34d399;
     }
 }
 
@@ -71,7 +73,6 @@ h1 {
     margin-top: 4px;
 }
 
-/* --- Estilos para el nuevo botón y el desplegable del calendario --- */
 .toggle-datepicker {
     background: none;
     border: none;
@@ -89,31 +90,27 @@ h1 {
     overflow: hidden;
     transition: max-height 0.4s ease-out;
 }
-
 .datepicker-wrapper.visible {
-    max-height: 100px; /* Altura suficiente para mostrar el input */
+    max-height: 100px;
 }
 
-input[type="date"] {
-    -webkit-appearance: none;
-    appearance: none;
-    position: relative;
+/* --- Estilos para el nuevo calendario --- */
+.input-group input#date-picker {
     cursor: pointer;
-    width: 100%;
-    padding: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    font-size: 16px;
-    box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
-    background-color: var(--body-background);
-    color: var(--text-primary);
+    padding-right: 40px; /* Espacio para el ícono */
 }
-input[type="date"]::-webkit-calendar-picker-indicator {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="%239ca3af"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0h18" /></svg>');
-    width: 20px;
-    height: 20px;
+
+/* Variables para personalizar el calendario */
+.datepicker {
+    --bs-primary: var(--accent-text);
+    --bs-primary-rgb: 12, 74, 110;
+    --bs-body-bg: var(--card-background);
+    --bs-body-color: var(--text-primary);
+    --bs-secondary-color: var(--text-secondary);
+    --bs-border-color: var(--border-color);
 }
+/* Fin de estilos del calendario */
+
 
 .input-group label {
     display: block;
@@ -123,7 +120,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     color: var(--text-secondary);
     text-align: left;
 }
-.input-group input[type="number"] {
+.input-group input {
     width: 100%;
     padding: 12px;
     border: 1px solid var(--border-color);
@@ -134,6 +131,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     background-color: var(--body-background);
     color: var(--text-primary);
 }
+
 
 .result {
     margin-top: 25px;
@@ -160,28 +158,21 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     100% { background-color: var(--accent-bg); }
 }
 
-.result-text {
-    text-align: left;
-}
-.result-text h2 {
-    font-size: 16px;
-    margin: 0;
-    color: var(--accent-text);
-    font-weight: 500;
-}
-.result-text p {
-    font-size: 28px;
-    font-weight: 700;
-    margin: 2px 0 0 0;
-    color: var(--accent-text);
-}
+.result-text { text-align: left; }
+.result-text h2 { font-size: 16px; margin: 0; color: var(--accent-text); font-weight: 500; }
+.result-text p { font-size: 28px; font-weight: 700; margin: 2px 0 0 0; color: var(--accent-text); }
 
 .copy-icon svg {
     width: 24px;
     height: 24px;
     color: var(--accent-text);
-    transition: transform 0.2s ease;
+    transition: all 0.2s ease;
 }
+/* Estilo para el check verde */
+.copy-icon svg.check {
+    color: var(--success-color);
+}
+
 
 .credit {
     text-align: center;
