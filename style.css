@@ -115,6 +115,8 @@ h1 {
 }
 .input-group input#date-picker {
     cursor: pointer;
+    position: relative;
+    padding-right: 40px; /* Espacio para el ícono */
 }
 
 .result {
@@ -165,57 +167,97 @@ h1 {
 }
 
 /* --- ESTILOS PROFESIONALES PARA EL CALENDARIO --- */
-.datepicker {
-    --bs-primary: var(--accent-text);
-    --bs-primary-rgb: 12, 74, 110;
-    --bs-body-bg: var(--card-background);
-    --bs-body-color: var(--text-primary);
-    --bs-secondary-color: var(--text-secondary);
-    --bs-border-color: var(--border-color);
-    --bs-border-radius: 1rem;
-    --bs-highlight-bg: var(--accent-bg);
+.datepicker-picker {
+    border-radius: 1rem !important;
     border: 1px solid var(--border-color) !important;
-}
-.datepicker-header .datepicker-title {
-    background-color: var(--body-background);
-    border-radius: 0.5rem;
-    font-weight: 500;
-}
-.datepicker-header .btn {
-    border-radius: 0.5rem;
-    transition: background-color 0.2s ease;
-}
-.datepicker-header .btn:hover {
-    background-color: var(--body-background);
-}
-.datepicker-footer {
-    background-color: var(--body-background);
-}
-.datepicker-footer .btn:hover {
-    background-color: var(--accent-bg);
-}
-.datepicker .day.today, .datepicker .day.today:hover {
-    background-color: var(--accent-bg);
-    color: var(--accent-text);
-}
-.datepicker .day.focused, .datepicker .day:hover {
-    background-color: var(--body-background);
-    border-radius: 0.5rem;
-}
-.datepicker-dropdown {
+    background-color: var(--card-background) !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
+
+.datepicker-header .datepicker-title, .datepicker-footer {
+    background-color: var(--body-background) !important;
+    box-shadow: none !important;
+}
+
+.datepicker-header .datepicker-title,
+.datepicker-header .btn,
+.datepicker-footer .btn {
+    font-weight: 500 !important;
+    color: var(--text-primary) !important;
+    border-radius: 0.75rem !important;
+    transition: background-color 0.2s ease;
+}
+
+.datepicker-header .btn:hover,
+.datepicker-footer .btn:hover {
+    background-color: var(--accent-bg) !important;
+}
+
+.datepicker .days .day, 
+.datepicker .dow {
+    color: var(--text-secondary);
+    border-radius: 0.75rem;
+}
+
+.datepicker .days .day.today {
+    color: var(--accent-text);
+    font-weight: 700;
+    background-color: var(--accent-bg);
+}
+
+.datepicker .days .day.selected,
+.datepicker .days .day.selected:hover {
+    background-color: var(--accent-text);
+    color: var(--card-background);
+    text-shadow: none;
+}
+
+.datepicker .days .day:not(.disabled):not(.selected):not(.today):hover {
+    background-color: var(--body-background);
+}
+
+.datepicker .days .day.disabled {
+    color: var(--border-color);
+}
+
 /* Reemplazo de botones anticuados por íconos SVG modernos */
-.datepicker-header .btn.prev-btn::after {
-    content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="%236b7280"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>');
-    width: 16px;
-    height: 16px;
+.datepicker-header .btn.prev-btn,
+.datepicker-header .btn.next-btn {
+    position: relative;
+    width: 2.5rem;
+    height: 2.5rem;
 }
-.datepicker-header .btn.next-btn::after {
-    content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="%236b7280"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>');
-    width: 16px;
-    height: 16px;
+
+.datepicker-header .btn.prev-btn::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 24px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
+
+.datepicker-header .btn.next-btn::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 24px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Ocultamos los caracteres « y » originales */
 .datepicker-header .btn.prev-btn, .datepicker-header .btn.next-btn {
-    padding: 0.5rem;
+    color: transparent !important;
 }
+
