@@ -1,4 +1,4 @@
-/* --- Estilos v2 para Calculadora UF --- */
+/* --- Estilos v2.1 para Calculadora UF --- */
 :root {
     --card-background: white;
     --body-background: #f4f5f7;
@@ -58,7 +58,7 @@ h1 {
 }
 
 .uf-display-box {
-    margin-bottom: 10px; /* Reducido para dar espacio al nuevo botón */
+    margin-bottom: 10px;
     color: var(--text-primary);
     font-weight: 500;
     font-size: 16px;
@@ -103,7 +103,7 @@ input[type="date"] {
     padding: 12px;
     border: 1px solid var(--border-color);
     border-radius: 12px;
-    font-size: 16px; /* Ajustado */
+    font-size: 16px;
     box-sizing: border-box;
     font-family: 'Inter', sans-serif;
     background-color: var(--body-background);
@@ -114,8 +114,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     width: 20px;
     height: 20px;
 }
-/* --- Fin de estilos del calendario --- */
-
 
 .input-group label {
     display: block;
