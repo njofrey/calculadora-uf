@@ -91,22 +91,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     datePickerEl.addEventListener('changeDate', (event) => {
         getUfValue(event.detail.date);
-        datepicker.hide();
     });
 
     toggleBtn.addEventListener('click', () => {
         const isVisible = datepickerContainer.classList.toggle('visible');
         toggleBtn.textContent = isVisible ? 'Ocultar calendario' : 'Consultar otra fecha';
         if (!isVisible) {
-            datepicker.setDate(undefined); // Limpiar la fecha
-            getUfValue(); // Volver al valor de hoy
+            datepicker.setDate(undefined);
+            getUfValue();
         }
     });
 
     ufInputElement.addEventListener('input', calculate);
-    ufInputElement.addEventListener('focus', () => ufInputElement.select()); // Seleccionar texto al hacer foco
+    ufInputElement.addEventListener('focus', () => ufInputElement.select());
 
     // --- Inicialización ---
     copyIconContainer.innerHTML = iconCopy;
-    getUfValue(); // Cargar valor de hoy al iniciar
+    getUfValue();
 });
