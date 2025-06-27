@@ -16,16 +16,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const iconCheck = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>`;
 
     async function getUfValue() {
+        // URL original de la API
+        const apiUrl = 'https://mindicador.cl/api/uf';
+        // URL con el proxy CORS para evitar bloqueos del navegador
+        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`;
+
         try {
-            const response = await fetch('https://mindicador.cl/api/uf');
-            if (!response.ok) throw new Error('No se pudo obtener el valor de la UF.');
-            const data = await response.json();
+            const response = await fetch(proxyUrl);
+            if (!response.ok) throw new Error('No se pudo obtener el valor de la UF a través del proxy.');
+            
+            // El proxy devuelve el texto plano, por lo que necesitamos convertirlo a JSON manualmente
+            const dataText = await response.text();
+            const data = JSON.parse(dataText);
+
             ufRate = data.serie[0].valor;
+            
             const today = new Date();
             const dateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
             const formattedDate = today.toLocaleDateString('es-CL', dateOptions);
             const formattedUf = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(ufRate);
+            
             ufDisplayElement.innerHTML = `<span>UF hoy = <strong>${formattedUf}</strong></span><div class="uf-date">${formattedDate}</div>`;
+
             if (!ufInputElement.value) {
                 ufInputElement.value = 1;
             }
@@ -49,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     resultBox.addEventListener('click', () => {
-        // Evitar múltiples clicks si la animación está en curso
         if (resultBox.classList.contains('is-copying')) return;
 
         const rawValue = resultBox.dataset.rawValue;
@@ -58,14 +69,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const numberToCopy = parseInt(rawValue, 10).toString();
         navigator.clipboard.writeText(numberToCopy).then(() => {
             
-            // Activar el estado de copiado
-            copyTextElement.textContent = 'Copiado';
             resultBox.classList.add('is-copying');
+            copyTextElement.textContent = 'Copiado';
             
-            // Revertir todo al estado normal después de 1.5 segundos
             setTimeout(() => {
                 resultBox.classList.remove('is-copying');
-                // Limpiar el texto después para que la transición de opacidad termine
                 setTimeout(() => {
                     copyTextElement.textContent = '';
                 }, 300);
