@@ -94,6 +94,7 @@ h1 {
     color: var(--text-primary);
 }
 
+/* --- Caja de resultado rediseñada --- */
 .result {
     display: flex;
     align-items: center;
@@ -103,15 +104,18 @@ h1 {
     border-radius: 16px;
     padding: 15px 20px;
     cursor: pointer;
+    transition: all 0.2s ease;
 }
-
-/* Animación de flash al copiar */
+.result:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px rgba(0, 122, 255, 0.1);
+}
 .result.copied {
     animation: flash 0.5s ease;
 }
 @keyframes flash {
     0% { background-color: var(--accent-bg); }
-    50% { background-color: #a7f3d0; }
+    50% { background-color: #a7f3d0; } /* Un verde menta para el flash */
     100% { background-color: var(--accent-bg); }
 }
 
@@ -131,23 +135,20 @@ h1 {
     color: var(--accent-text);
 }
 
+/* --- Estilos para el feedback de copiado --- */
 .copy-feedback {
     display: flex;
-    flex-direction: column; /* Apila el ícono y el texto verticalmente */
+    flex-direction: column;
     align-items: center;
-    justify-content: flex-start; 
-    min-height: 45px;
-}
-
-.copy-icon {
-    width: 24px;
-    height: 24px;
+    justify-content: center;
+    min-width: 60px; /* Ancho mínimo para que no se mueva al aparecer el texto */
 }
 
 .copy-icon svg {
-    width: 100%;
-    height: 100%;
+    width: 24px;
+    height: 24px;
     color: var(--accent-text);
+    transition: transform 0.2s ease;
 }
 
 .copy-text {
@@ -155,10 +156,12 @@ h1 {
     font-weight: 500;
     color: var(--accent-text);
     margin-top: 4px;
+    /* Oculto por defecto */
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
+/* Cuando el texto deba ser visible */
 .copy-text.visible {
     opacity: 1;
 }
