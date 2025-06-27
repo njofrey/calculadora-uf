@@ -15,13 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
       ufRate = data.serie[0].valor;
 
       const today = new Date();
-      const formattedDate = today.toLocaleDateString('es-CL', { day: 'numeric', month: 'long', year: 'numeric' });
-      const formattedUf = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(ufRate);
+      const formattedDate = today.toLocaleDateString('es-CL', {
+        day: 'numeric', month: 'long', year: 'numeric'
+      });
+      const formattedUf = new Intl.NumberFormat('es-CL', {
+        style: 'currency', currency: 'CLP'
+      }).format(ufRate);
 
       ufDisplayElement.innerHTML = `<span>UF hoy = <strong>${formattedUf}</strong></span><div class="uf-date">${formattedDate}</div>`;
 
       if (!ufInputElement.value) ufInputElement.value = 1;
-
       calculate();
     } catch (error) {
       ufDisplayElement.textContent = 'Error al cargar valor.';
@@ -36,9 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalClp = ufAmount * ufRate;
 
     clpResultElement.textContent = new Intl.NumberFormat('es-CL', {
-      style: 'currency',
-      currency: 'CLP',
-      maximumFractionDigits: 0
+      style: 'currency', currency: 'CLP', maximumFractionDigits: 0
     }).format(totalClp);
 
     resultBox.dataset.rawValue = totalClp;
