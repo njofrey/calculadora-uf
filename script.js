@@ -8,15 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyTextElement = document.getElementById('copy-text');
     let ufRate = 0;
 
-    // --- ÍCONOS SVG ---
-    // ESTA LÍNEA DEFINE EL ÍCONO DE COPIAR CLÁSICO (PORTAPAPELES)
-    const iconCopy = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.353-.026.715-.026 1.068 0 1.13.094 1.976 1.057 1.976 2.192V7.5m-9.75 0h9.75M9 11.25H7.5a2.25 2.25 0 0 0-2.25 2.25V19.5a2.25 2.25 0 0 0 2.25 2.25h9.75a2.25 2.25 0 0 0 2.25-2.25V13.5a2.25 2.25 0 0 0-2.25-2.25H9.75" /></svg>`;
+    // --- ÍCONOS SVG (VERSIÓN DEFINITIVA Y PROBADA) ---
+    // ÍCONO CLÁSICO DE PORTAPAPELES - VERSIÓN MÁS COMPATIBLE OBTENIDA DE HEROICONS
+    const iconCopy = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08H6.108c-1.135 0-2.098.845-2.192 1.976A48.424 48.424 0 003.75 6.108V18a2.25 2.25 0 002.25 2.25h3.375m9.75-15.375H3.75" /></svg>`;
     const iconCheck = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>`;
 
     // --- FUNCIÓN PARA OBTENER EL VALOR DE LA UF ---
     async function getUfValue() {
         try {
-            const response = await fetch('https://mindicador.cl/api/uf');
+            const response = await fetch(`https://mindicador.cl/api/uf?t=${new Date().getTime()}`);
             if (!response.ok) throw new Error('No se pudo obtener el valor de la UF.');
             
             const data = await response.json();
@@ -60,31 +60,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- LÓGICA DE COPIADO ---
     resultBox.addEventListener('click', () => {
         const rawValue = resultBox.dataset.rawValue;
-        if (!rawValue || resultBox.classList.contains('copied')) return; 
-
-        const numberToCopy = parseInt(rawValue, 10).toString();
-
-        navigator.clipboard.writeText(numberToCopy).then(() => {
-            copyIconContainer.innerHTML = iconCheck;
-            copyTextElement.textContent = 'Copiado';
-            copyTextElement.classList.add('visible');
-            resultBox.classList.add('copied');
-            
-            setTimeout(() => {
-                copyIconContainer.innerHTML = iconCopy;
-                copyTextElement.classList.remove('visible');
-                resultBox.classList.remove('copied');
-                setTimeout(() => { copyTextElement.textContent = ''; }, 300);
-            }, 1500);
-        }).catch(err => {
-            console.error('Error al copiar: ', err);
-            copyTextElement.textContent = 'Error';
-            copyTextElement.classList.add('visible');
-        });
-    });
-
-    // --- INICIALIZACIÓN ---
-    ufInputElement.addEventListener('input', calculate);
-    copyIconContainer.innerHTML = iconCopy; // Carga el ícono correcto al iniciar
-    getUfValue();
-});
+        if (!rawValue || resultBox.classList.
