@@ -1,183 +1,141 @@
-/* --- Estilos v2 para Calculadora UF --- */
 :root {
-    --card-background: white;
-    --body-background: #f4f5f7;
-    --text-primary: #171717;
-    --text-secondary: #6b7280;
-    --border-color: #e5e7eb;
-    --accent-bg: #e0f2fe;
-    --accent-text: #0c4a6e;
-    --accent-border: #7dd3fc;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --card-background: #1f2937;
-        --body-background: #111827;
-        --text-primary: #f9fafb;
-        --text-secondary: #9ca3af;
-        --border-color: #374151;
-        --accent-bg: #0c4a6e;
-        --accent-text: #e0f2fe;
-        --accent-border: #0369a1;
-    }
+  --card-background: white;
+  --body-background: #f4f5f7;
+  --text-primary: #171717;
+  --text-secondary: #6b7280;
+  --border-color: #e5e7eb;
+  --accent-bg: #e0f2fe;
+  --accent-text: #0c4a6e;
+  --accent-border: #7dd3fc;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--body-background);
-    color: var(--text-primary);
-    margin: 0;
-    padding: 20px 10px;
-    box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--body-background);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 20px;
 }
 
 .main-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
 .card {
-    background-color: var(--card-background);
-    padding: 32px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
-    text-align: center;
-    max-width: 380px;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-h1 {
-    font-size: 26px;
-    margin: 0 0 15px 0;
+  background-color: var(--card-background);
+  padding: 32px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+  max-width: 380px;
+  width: 100%;
 }
 
 .uf-display-box {
-    margin-bottom: 25px;
-    color: var(--text-primary);
-    font-weight: 500;
-    font-size: 16px;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 25px;
 }
-.uf-display-box .uf-date {
-    display: block;
-    font-size: 12px;
-    font-style: italic;
-    color: var(--text-secondary);
-    margin-top: 4px;
+.uf-date {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--text-secondary);
 }
 
 .input-group {
-    text-align: left;
-    margin-bottom: 25px;
+  margin-bottom: 25px;
 }
 .input-group label {
-    display: block;
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 8px;
-    color: var(--text-secondary);
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--text-secondary);
 }
 .input-group input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    font-size: 20px;
-    box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
-    background-color: var(--body-background);
-    color: var(--text-primary);
+  width: 100%;
+  padding: 12px;
+  font-size: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background-color: var(--body-background);
+  color: var(--text-primary);
 }
 
-/* --- Caja de resultado rediseñada --- */
 .result {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: var(--accent-bg);
-    border: 1px solid var(--accent-border);
-    border-radius: 16px;
-    padding: 15px 20px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-.result:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 15px rgba(0, 122, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  border-radius: 16px;
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 .result.copied {
-    animation: flash 0.5s ease;
-}
-@keyframes flash {
-    0% { background-color: var(--accent-bg); }
-    50% { background-color: #a7f3d0; } /* Un verde menta para el flash */
-    100% { background-color: var(--accent-bg); }
+  background-color: #a7f3d0;
 }
 
-.result-text {
-    text-align: left;
-}
 .result-text h2 {
-    font-size: 16px;
-    margin: 0;
-    color: var(--accent-text);
-    font-weight: 500;
+  font-size: 16px;
+  color: var(--accent-text);
+  margin: 0;
 }
 .result-text p {
-    font-size: 28px;
-    font-weight: 700;
-    margin: 2px 0 0 0;
-    color: var(--accent-text);
+  font-size: 28px;
+  font-weight: 700;
+  margin: 4px 0 0 0;
+  color: var(--accent-text);
 }
 
-/* --- Estilos para el feedback de copiado --- */
 .copy-feedback {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-width: 60px; /* Ancho mínimo para que no se mueva al aparecer el texto */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.copy-icon svg {
-    width: 24px;
-    height: 24px;
-    color: var(--accent-text);
-    transition: transform 0.2s ease;
+.copy-icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+.icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: opacity 0.2s ease;
+}
+.icon-copy {
+  opacity: 1;
+}
+.icon-check {
+  opacity: 0;
+}
+.result.copied .icon-copy {
+  opacity: 0;
+}
+.result.copied .icon-check {
+  opacity: 1;
 }
 
 .copy-text {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--accent-text);
-    margin-top: 4px;
-    /* Oculto por defecto */
-    opacity: 0;
-    transition: opacity 0.3s ease;
+  font-size: 12px;
+  color: var(--accent-text);
+  margin-top: 4px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
-
-/* Cuando el texto deba ser visible */
 .copy-text.visible {
-    opacity: 1;
+  opacity: 1;
 }
 
 .credit {
-    text-align: center;
-    margin-top: 25px;
-    color: var(--text-secondary);
-    font-size: 12px;
-    opacity: 0.8;
-}
-.credit a {
-    color: var(--text-secondary);
-    font-weight: 500;
-    text-decoration: none;
-}
-.credit a:hover {
-    text-decoration: underline;
+  margin-top: 25px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  opacity: 0.8;
 }
