@@ -94,7 +94,6 @@ h1 {
     color: var(--text-primary);
 }
 
-/* --- Caja de resultado rediseñada --- */
 .result {
     display: flex;
     align-items: center;
@@ -115,7 +114,7 @@ h1 {
 }
 @keyframes flash {
     0% { background-color: var(--accent-bg); }
-    50% { background-color: #a7f3d0; } /* Un verde menta para el flash */
+    50% { background-color: #a7f3d0; }
     100% { background-color: var(--accent-bg); }
 }
 
@@ -135,20 +134,19 @@ h1 {
     color: var(--accent-text);
 }
 
-/* --- Estilos para el feedback de copiado --- */
 .copy-feedback {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-width: 60px; /* Ancho mínimo para que no se mueva al aparecer el texto */
+    /* CORRECCIÓN: Se añade altura mínima para evitar el reajuste de layout y el "deslizamiento" */
+    min-height: 45px; 
 }
 
 .copy-icon svg {
     width: 24px;
     height: 24px;
     color: var(--accent-text);
-    /* Se eliminó la transición para evitar el movimiento */
 }
 
 .copy-text {
@@ -156,12 +154,10 @@ h1 {
     font-weight: 500;
     color: var(--accent-text);
     margin-top: 4px;
-    /* Oculto por defecto */
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
-/* Cuando el texto deba ser visible */
 .copy-text.visible {
     opacity: 1;
 }
@@ -180,4 +176,3 @@ h1 {
 }
 .credit a:hover {
     text-decoration: underline;
-}
