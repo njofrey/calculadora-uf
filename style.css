@@ -94,7 +94,6 @@ h1 {
     color: var(--text-primary);
 }
 
-/* --- Caja de resultado rediseñada --- */
 .result {
     display: flex;
     align-items: center;
@@ -104,12 +103,9 @@ h1 {
     border-radius: 16px;
     padding: 15px 20px;
     cursor: pointer;
-    transition: all 0.2s ease;
 }
-.result:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 15px rgba(0, 122, 255, 0.1);
-}
+
+/* Animación de flash al copiar */
 .result.copied {
     animation: flash 0.5s ease;
 }
@@ -135,41 +131,23 @@ h1 {
     color: var(--accent-text);
 }
 
-/* --- Estilos para el feedback de copiado --- */
 .copy-feedback {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Apila el ícono y el texto verticalmente */
     align-items: center;
-    justify-content: center;
-    min-width: 60px;
+    justify-content: flex-start; 
+    min-height: 45px;
 }
 
 .copy-icon {
-    position: relative;
-}
-.copy-icon svg {
     width: 24px;
     height: 24px;
+}
+
+.copy-icon svg {
+    width: 100%;
+    height: 100%;
     color: var(--accent-text);
-}
-
-/* Al copiar, aparece un ✓ encima */
-.result.copied .copy-icon::after {
-    content: '✓';
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 20px;
-    color: green;
-    background: transparent;
-    animation: fadeOut 1.2s ease forwards;
-    pointer-events: none;
-}
-
-@keyframes fadeOut {
-    0% { opacity: 1; transform: scale(1); }
-    80% { opacity: 1; transform: scale(1.1); }
-    100% { opacity: 0; transform: scale(1.2); }
 }
 
 .copy-text {
@@ -180,6 +158,7 @@ h1 {
     opacity: 0;
     transition: opacity 0.3s ease;
 }
+
 .copy-text.visible {
     opacity: 1;
 }
