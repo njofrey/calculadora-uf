@@ -110,7 +110,7 @@ h1 {
     transform: scale(1.02);
     box-shadow: 0 4px 15px rgba(0, 122, 255, 0.1);
 }
-.result.copied { /* 3. Estilo para feedback visual al copiar */
+.result.copied {
     animation: flash 0.5s ease;
 }
 @keyframes flash {
@@ -135,12 +135,35 @@ h1 {
     color: var(--accent-text);
 }
 
-/* --- Estilos para el ícono de copiar --- */
+/* --- Estilos para el feedback de copiado --- */
+.copy-feedback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px; /* Ancho mínimo para que no se mueva al aparecer el texto */
+}
+
 .copy-icon svg {
     width: 24px;
     height: 24px;
     color: var(--accent-text);
     transition: transform 0.2s ease;
+}
+
+.copy-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent-text);
+    margin-top: 4px;
+    /* Oculto por defecto */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Cuando el texto deba ser visible */
+.copy-text.visible {
+    opacity: 1;
 }
 
 .credit {
@@ -149,4 +172,12 @@ h1 {
     color: var(--text-secondary);
     font-size: 12px;
     opacity: 0.8;
+}
+.credit a {
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-decoration: none;
+}
+.credit a:hover {
+    text-decoration: underline;
 }
