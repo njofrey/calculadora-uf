@@ -148,7 +148,7 @@ h1 {
     width: 24px;
     height: 24px;
     color: var(--accent-text);
-    transition: transform 0.2s ease;
+    /* Se eliminó la transición para evitar el movimiento */
 }
 
 .copy-text {
