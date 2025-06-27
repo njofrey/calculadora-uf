@@ -201,3 +201,23 @@ h1 {
 .credit a:hover {
     text-decoration: underline;
 }
+
+.copy-icon {
+    position: relative;
+}
+
+.check-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: 24px;
+    pointer-events: none;
+    animation: fadeOut 1.2s ease forwards;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; transform: scale(1); }
+    80% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 0; transform: scale(1.4); }
+}
