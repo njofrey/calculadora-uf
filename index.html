@@ -1,46 +1,183 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calculadora UF a CLP</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
-</head>
-<body>
-  <div class="main-container">
-    <div class="card">
-      <h1>Calculadora UF a CLP</h1>
-      <div id="uf-display" class="uf-display-box">Cargando valor...</div>
-      <div class="input-group">
-        <label for="uf-input">Cantidad de UF</label>
-        <input type="number" id="uf-input" placeholder="Ej: 1" />
-      </div>
-      <div class="result" id="result-box">
-        <div class="result-text">
-          <h2>Total en CLP:</h2>
-          <p id="clp-result">$0</p>
-        </div>
-        <div class="copy-feedback">
-          <div class="copy-icon" id="copy-icon-container">
-            <span class="icon icon-copy visible">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor">
-                <path d="M0 0h24v24H0V0z" fill="none"/>
-                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-              </svg>
-            </span>
-            <span class="icon icon-check">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-              </svg>
-            </span>
-          </div>
-          <span class="copy-text" id="copy-text"></span>
-        </div>
-      </div>
-    </div>
-    <p class="credit">Hecho con ❤️ por Nicolás Jofré</p>
-  </div>
-  <script src="script.js"></script>
-</body>
-</html>
+/* --- Estilos v2 para Calculadora UF --- */
+:root {
+    --card-background: white;
+    --body-background: #f4f5f7;
+    --text-primary: #171717;
+    --text-secondary: #6b7280;
+    --border-color: #e5e7eb;
+    --accent-bg: #e0f2fe;
+    --accent-text: #0c4a6e;
+    --accent-border: #7dd3fc;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --card-background: #1f2937;
+        --body-background: #111827;
+        --text-primary: #f9fafb;
+        --text-secondary: #9ca3af;
+        --border-color: #374151;
+        --accent-bg: #0c4a6e;
+        --accent-text: #e0f2fe;
+        --accent-border: #0369a1;
+    }
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--body-background);
+    color: var(--text-primary);
+    margin: 0;
+    padding: 20px 10px;
+    box-sizing: border-box;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 100dvh;
+}
+
+.card {
+    background-color: var(--card-background);
+    padding: 32px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+    text-align: center;
+    max-width: 380px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 26px;
+    margin: 0 0 15px 0;
+}
+
+.uf-display-box {
+    margin-bottom: 25px;
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 16px;
+}
+.uf-display-box .uf-date {
+    display: block;
+    font-size: 12px;
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 25px;
+}
+.input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+}
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 20px;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--body-background);
+    color: var(--text-primary);
+}
+
+/* --- Caja de resultado rediseñada --- */
+.result {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-radius: 16px;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.result:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px rgba(0, 122, 255, 0.1);
+}
+.result.copied {
+    animation: flash 0.5s ease;
+}
+@keyframes flash {
+    0% { background-color: var(--accent-bg); }
+    50% { background-color: #a7f3d0; } /* Un verde menta para el flash */
+    100% { background-color: var(--accent-bg); }
+}
+
+.result-text {
+    text-align: left;
+}
+.result-text h2 {
+    font-size: 16px;
+    margin: 0;
+    color: var(--accent-text);
+    font-weight: 500;
+}
+.result-text p {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 2px 0 0 0;
+    color: var(--accent-text);
+}
+
+/* --- Estilos para el feedback de copiado --- */
+.copy-feedback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px; /* Ancho mínimo para que no se mueva al aparecer el texto */
+}
+
+.copy-icon svg {
+    width: 24px;
+    height: 24px;
+    color: var(--accent-text);
+    transition: transform 0.2s ease;
+}
+
+.copy-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent-text);
+    margin-top: 4px;
+    /* Oculto por defecto */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Cuando el texto deba ser visible */
+.copy-text.visible {
+    opacity: 1;
+}
+
+.credit {
+    text-align: center;
+    margin-top: 25px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    opacity: 0.8;
+}
+.credit a {
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-decoration: none;
+}
+.credit a:hover {
+    text-decoration: underline;
+}
