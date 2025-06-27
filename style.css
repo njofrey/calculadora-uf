@@ -1,3 +1,149 @@
+/* --- Estilos v2 para Calculadora UF --- */
+:root {
+    --card-background: white;
+    --body-background: #f4f5f7;
+    --text-primary: #171717;
+    --text-secondary: #6b7280;
+    --border-color: #e5e7eb;
+    --accent-bg: #e0f2fe;
+    --accent-text: #0c4a6e;
+    --accent-border: #7dd3fc;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --card-background: #1f2937;
+        --body-background: #111827;
+        --text-primary: #f9fafb;
+        --text-secondary: #9ca3af;
+        --border-color: #374151;
+        --accent-bg: #0c4a6e;
+        --accent-text: #e0f2fe;
+        --accent-border: #0369a1;
+    }
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--body-background);
+    color: var(--text-primary);
+    margin: 0;
+    padding: 20px 10px;
+    box-sizing: border-box;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 100dvh;
+}
+
+.card {
+    background-color: var(--card-background);
+    padding: 32px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+    text-align: center;
+    max-width: 380px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 26px;
+    margin: 0 0 15px 0;
+}
+
+.uf-display-box {
+    margin-bottom: 25px;
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 16px;
+}
+.uf-display-box .uf-date {
+    display: block;
+    font-size: 12px;
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 25px;
+}
+.input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+}
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 20px;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--body-background);
+    color: var(--text-primary);
+}
+
+/* --- Caja de resultado rediseñada --- */
+.result {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-radius: 16px;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.result:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px rgba(0, 122, 255, 0.1);
+}
+.result.copied {
+    animation: flash 0.5s ease;
+}
+@keyframes flash {
+    0% { background-color: var(--accent-bg); }
+    50% { background-color: #a7f3d0; }
+    100% { background-color: var(--accent-bg); }
+}
+
+.result-text {
+    text-align: left;
+}
+.result-text h2 {
+    font-size: 16px;
+    margin: 0;
+    color: var(--accent-text);
+    font-weight: 500;
+}
+.result-text p {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 2px 0 0 0;
+    color: var(--accent-text);
+}
+
+/* --- Estilos para el feedback de copiado --- */
+.copy-feedback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+}
+
 .copy-icon {
     position: relative;
 }
@@ -24,4 +170,32 @@
     0% { opacity: 1; transform: scale(1); }
     80% { opacity: 1; transform: scale(1.1); }
     100% { opacity: 0; transform: scale(1.2); }
+}
+
+.copy-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent-text);
+    margin-top: 4px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.copy-text.visible {
+    opacity: 1;
+}
+
+.credit {
+    text-align: center;
+    margin-top: 25px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    opacity: 0.8;
+}
+.credit a {
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-decoration: none;
+}
+.credit a:hover {
+    text-decoration: underline;
 }
