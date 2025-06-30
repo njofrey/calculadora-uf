@@ -8,32 +8,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyTextElement = document.getElementById('copy-text');
     let ufRate = 0;
 
-    // --- ÍCONO SVG CORRECTO (BASADO EN TU IMAGEN) ---
+    // --- Íconos SVG ---
     const iconCopy = `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>`;
     const iconCheck = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>`;
 
     // --- FUNCIÓN PARA OBTENER EL VALOR DE LA UF ---
     async function getUfValue() {
         try {
-            // Llamada a la API limpia y funcional
             const response = await fetch('https://mindicador.cl/api/uf');
             if (!response.ok) throw new Error('No se pudo obtener el valor de la UF.');
-            
+
             const data = await response.json();
             ufRate = data.serie[0].valor;
-            
+
             const today = new Date();
             const dateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
             const formattedDate = today.toLocaleDateString('es-CL', dateOptions);
             const formattedUf = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(ufRate);
-            
+
             ufDisplayElement.innerHTML = `<span>UF hoy = <strong>${formattedUf}</strong></span><div class="uf-date">${formattedDate}</div>`;
 
-            if (!ufInputElement.value) {
-                ufInputElement.value = 1;
-            }
-
-            calculate();
+            // --- CAMBIO 1: Eliminamos el código que ponía "1" al inicio ---
+            // Ya no se asigna un valor por defecto ni se calcula al cargar.
+            // El campo de entrada comenzará vacío.
+            calculate(); // Llamamos para que el resultado inicial sea $0 o esté vacío.
 
         } catch (error) {
             ufDisplayElement.textContent = 'Error al cargar valor.';
@@ -45,22 +43,25 @@ document.addEventListener('DOMContentLoaded', () => {
     function calculate() {
         if (ufRate === 0) return;
 
+        // Se convierte el valor a número. Si está vacío o no es un número, será 0.
         const ufAmount = parseFloat(ufInputElement.value) || 0;
         const totalClp = ufAmount * ufRate;
-        
+
+        // Si el campo de entrada está vacío (ufAmount es 0), mostramos $0.
+        // Si prefieres que no se muestre nada, puedes ajustar esta parte.
         clpResultElement.textContent = new Intl.NumberFormat('es-CL', {
             style: 'currency',
             currency: 'CLP',
             maximumFractionDigits: 0
         }).format(totalClp);
-        
+
         resultBox.dataset.rawValue = totalClp;
     }
 
     // --- LÓGICA DE COPIADO ---
     resultBox.addEventListener('click', () => {
         const rawValue = resultBox.dataset.rawValue;
-        if (!rawValue || resultBox.classList.contains('copied')) return; 
+        if (!rawValue || resultBox.classList.contains('copied')) return;
 
         const numberToCopy = parseInt(rawValue, 10).toString();
 
@@ -69,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             copyTextElement.textContent = 'Copiado';
             copyTextElement.classList.add('visible');
             resultBox.classList.add('copied');
-            
+
             setTimeout(() => {
                 copyIconContainer.innerHTML = iconCopy;
                 copyTextElement.classList.remove('visible');
@@ -83,8 +84,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- INICIALIZACIÓN ---
+    // --- INICIALIZACIÓN Y EVENTOS ---
     ufInputElement.addEventListener('input', calculate);
+
+    // --- CAMBIO 2: Añadimos el evento 'blur' ---
+    // Si el usuario sale del campo y este está vacío, se establece en 1 y se calcula.
+    ufInputElement.addEventListener('blur', () => {
+        if (ufInputElement.value.trim() === '') {
+            ufInputElement.value = 1;
+            calculate();
+        }
+    });
+
     copyIconContainer.innerHTML = iconCopy;
     getUfValue();
 });
