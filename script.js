@@ -27,11 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const formattedUf = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(ufRate);
 
             ufDisplayElement.innerHTML = `<span>UF hoy = <strong>${formattedUf}</strong></span><div class="uf-date">${formattedDate}</div>`;
-
-            // --- CAMBIO 1: Eliminamos el código que ponía "1" al inicio ---
-            // Ya no se asigna un valor por defecto ni se calcula al cargar.
-            // El campo de entrada comenzará vacío.
-            calculate(); // Llamamos para que el resultado inicial sea $0 o esté vacío.
+            
+            calculate();
 
         } catch (error) {
             ufDisplayElement.textContent = 'Error al cargar valor.';
@@ -43,12 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function calculate() {
         if (ufRate === 0) return;
 
-        // Se convierte el valor a número. Si está vacío o no es un número, será 0.
         const ufAmount = parseFloat(ufInputElement.value) || 0;
         const totalClp = ufAmount * ufRate;
 
-        // Si el campo de entrada está vacío (ufAmount es 0), mostramos $0.
-        // Si prefieres que no se muestre nada, puedes ajustar esta parte.
         clpResultElement.textContent = new Intl.NumberFormat('es-CL', {
             style: 'currency',
             currency: 'CLP',
@@ -83,19 +77,3 @@ document.addEventListener('DOMContentLoaded', () => {
             copyTextElement.classList.add('visible');
         });
     });
-
-    // --- INICIALIZACIÓN Y EVENTOS ---
-    ufInputElement.addEventListener('input', calculate);
-
-    // --- CAMBIO 2: Añadimos el evento 'blur' ---
-    // Si el usuario sale del campo y este está vacío, se establece en 1 y se calcula.
-    ufInputElement.addEventListener('blur', () => {
-        if (ufInputElement.value.trim() === '') {
-            ufInputElement.value = 1;
-            calculate();
-        }
-    });
-
-    copyIconContainer.innerHTML = iconCopy;
-    getUfValue();
-});
