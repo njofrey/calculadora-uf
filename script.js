@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const iconCopy = `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>`;
     const iconCheck = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>`;
 
-    // --- FUNCIÓN PARA OBTENER EL VALOR DE LA UF ---
+    // --- 1. FUNCIÓN PARA OBTENER Y MOSTRAR EL VALOR DE LA UF ---
     async function getUfValue() {
         try {
             const response = await fetch('https://mindicador.cl/api/uf');
@@ -26,8 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const formattedDate = today.toLocaleDateString('es-CL', dateOptions);
             const formattedUf = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(ufRate);
 
+            // Esta es la línea que muestra el valor de la UF. Si esto falla, es la API.
             ufDisplayElement.innerHTML = `<span>UF hoy = <strong>${formattedUf}</strong></span><div class="uf-date">${formattedDate}</div>`;
             
+            // Se calcula el valor inicial (que será $0 si el campo está vacío)
             calculate();
 
         } catch (error) {
@@ -36,10 +38,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- FUNCIÓN PARA CALCULAR ---
+    // --- 2. FUNCIÓN PARA CALCULAR EL TOTAL ---
     function calculate() {
         if (ufRate === 0) return;
 
+        // Si el input está vacío, "|| 0" hace que el valor sea 0.
         const ufAmount = parseFloat(ufInputElement.value) || 0;
         const totalClp = ufAmount * ufRate;
 
@@ -55,7 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- LÓGICA DE COPIADO ---
     resultBox.addEventListener('click', () => {
         const rawValue = resultBox.dataset.rawValue;
-        if (!rawValue || resultBox.classList.contains('copied')) return;
+        // Previene el copiado si el valor es 0 o ya está en estado "copiado"
+        if (!rawValue || rawValue === '0' || resultBox.classList.contains('copied')) return;
 
         const numberToCopy = parseInt(rawValue, 10).toString();
 
@@ -77,3 +81,13 @@ document.addEventListener('DOMContentLoaded', () => {
             copyTextElement.classList.add('visible');
         });
     });
+
+    // --- INICIALIZACIÓN ---
+    // Llama a calcular cada vez que se escribe en el input.
+    ufInputElement.addEventListener('input', calculate);
+
+    // No hay más eventos extra. Simple y directo.
+
+    copyIconContainer.innerHTML = iconCopy;
+    getUfValue(); // Llama a la API al cargar la página.
+});
