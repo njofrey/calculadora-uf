@@ -17,14 +17,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // Opcional: evitar que el usuario ingrese dos comas o caracteres inválidos
     ufInputElement.addEventListener('input', () => {
         let val = ufInputElement.value;
-        // Cambiar punto por coma para unificar separador decimal
-        val = val.replace(/\./g, ',');
+        // Eliminar puntos de miles existentes para trabajar con números crudos
+        val = val.replace(/\./g, '');
         // Eliminar cualquier carácter que no sea dígito o coma
         val = val.replace(/[^0-9,]/g, '');
+        // Permitir sólo una coma
+        const firstComma = val.indexOf(',');
+        if (firstComma !== -1) {
+            // Quitar comas adicionales
+            val = val.substring(0, firstComma + 1) + val.substring(firstComma + 1).replace(/,/g, '');
+        }
         // Si el usuario empieza con coma, insertar un 0 delante
         if (val.startsWith(',')) {
             val = '0' + val;
         }
+
+        // Formatear parte entera con separador de miles (puntos)
+        const [rawInt, rawDec] = val.split(',');
+        let formattedInt = rawInt ? Number(rawInt).toLocaleString('es-CL') : '';
+        val = rawDec !== undefined ? (rawDec === '' ? formattedInt + ',' : `${formattedInt},${rawDec}`) : formattedInt;
+
         ufInputElement.value = val;
         calculate();
     });
