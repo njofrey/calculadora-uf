@@ -83,11 +83,18 @@ h1 { font-size: 26px; margin: 0 0 15px 0; }
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: var(--accent-bg);
-    border: 1px solid var(--accent-border);
-    border-radius: 16px;
-    padding: 15px 20px;
-    cursor: pointer;
+    background-color: #e6f7ff;
+    border: 1px solid #91d5ff;
+    border-radius: 8px;
+    padding: 15px;
+    cursor: pointer; /* indica que es clickeable */
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Hover sutil para dar feedback al copiar */
+.result:hover {
+    transform: scale(1.005);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 .result-text { text-align: left; }
 .result-text h2 {
