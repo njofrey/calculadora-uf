@@ -8,18 +8,6 @@
     --accent-text: #0c4a6e;
     --accent-border: #7dd3fc;
 }
-@media (prefers-color-scheme: dark) {
-    :root {
-        --card-background: #1f2937;
-        --body-background: #111827;
-        --text-primary: #f9fafb;
-        --text-secondary: #9ca3af;
-        --border-color: #374151;
-        --accent-bg: #0c4a6e;
-        --accent-text: #e0f2fe;
-        --accent-border: #0369a1;
-    }
-}
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--body-background);
@@ -85,7 +73,7 @@ h1 { font-size: 26px; margin: 0 0 15px 0; }
     justify-content: space-between;
     background-color: #e6f7ff;
     border: 1px solid #91d5ff;
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 15px;
     cursor: pointer; /* indica que es clickeable */
     transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -93,7 +81,7 @@ h1 { font-size: 26px; margin: 0 0 15px 0; }
 
 /* Hover sutil para dar feedback al copiar */
 .result:hover {
-    transform: scale(1.005);
+    transform: scale(1.0005);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 .result-text { text-align: left; }
