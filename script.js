@@ -55,8 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const formattedDate = today.toLocaleDateString('es-CL', dateOptions);
             const formattedUf = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(ufRate);
             ufDisplayElement.innerHTML = `<span>UF hoy = <strong>${formattedUf}</strong></span><div class="uf-date">${formattedDate}</div>`;
-            if (!ufInputElement.value) {
-            }
             calculate();
         } catch (error) {
             ufDisplayElement.textContent = 'Error al cargar valor.';
@@ -96,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Eliminamos el listener anterior duplicado (ya llamamos a calculate dentro del filtro)
     copyIconWrapper.innerHTML = iconCopy;
     checkIconWrapper.innerHTML = iconCheck;
     getUfValue();
