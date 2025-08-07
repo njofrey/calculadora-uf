@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const rawValue = resultBox.dataset.rawValue;
         if (!rawValue || rawValue === '0') {
             resultBox.classList.add('shake');
-            setTimeout(() => resultBox.classList.remove('shake'), 500);
+            setTimeout(() => resultBox.classList.remove('shake'), 300);
             return;
         }
 

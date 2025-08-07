@@ -7,6 +7,7 @@
     --accent-bg: #e6f7ff;
     --accent-text: #0c4a6e;
     --accent-border: #91d5ff;
+    --success-flash: #0c4a6e;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,6 +21,7 @@
         --accent-bg: #334155;
         --accent-text: #cbd5e1;
         --accent-border: #475569;
+        --success-flash: #cbd5e1;
     }
 }
 
@@ -87,6 +89,19 @@ h1 { font-size: 26px; margin: 0 0 15px 0; }
     font-family: 'Inter', sans-serif;
     background-color: var(--card-background);
     color: var(--text-primary);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--accent-border);
+    box-shadow: 0 0 0 3px rgba(145, 213, 255, 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+    .input-group input:focus {
+        box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.4);
+    }
 }
 .result {
     display: flex;
@@ -97,7 +112,7 @@ h1 { font-size: 26px; margin: 0 0 15px 0; }
     border-radius: 12px;
     padding: 15px;
     cursor: pointer; 
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 
@@ -144,7 +159,7 @@ h1 { font-size: 26px; margin: 0 0 15px 0; }
     left: 0;
     width: 24px;
     height: 24px;
-    transition: opacity 0.25s ease;
+    transition: opacity 0.2s ease;
 }
 #icon-check-wrapper {
     opacity: 0;
@@ -161,16 +176,19 @@ h1 { font-size: 26px; margin: 0 0 15px 0; }
     color: var(--accent-text);
     margin-top: 4px;
     opacity: 0;
-    transition: opacity 0.25s ease;
+    transition: opacity 0.2s ease;
     position: absolute;
     top: 28px;
     white-space: nowrap;
 }
-.result.is-copying { animation: flash 0.5s ease; }
-.result.shake { animation: shake 0.5s ease; }
+.result.is-copying { animation: flash 0.4s ease-out; }
+.result.is-copying .copy-text { opacity: 1; }
+.result.is-copying #icon-copy-wrapper { opacity: 0; }
+.result.is-copying #icon-check-wrapper { opacity: 1; }
+.result.shake { animation: shake 0.3s ease-out; }
 @keyframes flash {
     0% { background-color: var(--accent-bg); }
-    50% { background-color: #10b981; }
+    50% { background-color: var(--success-flash); }
     100% { background-color: var(--accent-bg); }
 }
 @keyframes shake {
@@ -182,13 +200,10 @@ h1 { font-size: 26px; margin: 0 0 15px 0; }
 @media (prefers-color-scheme: dark) {
     @keyframes flash {
         0% { background-color: var(--accent-bg); }
-        50% { background-color: #065f46; }
+        50% { background-color: var(--success-flash); }
         100% { background-color: var(--accent-bg); }
     }
 }
-.result.is-copying #icon-copy-wrapper { opacity: 0; }
-.result.is-copying #icon-check-wrapper { opacity: 1; }
-.result.is-copying .copy-text { opacity: 1; }
 .credit {
     text-align: center;
     margin-top: 25px;
@@ -202,3 +217,11 @@ h1 { font-size: 26px; margin: 0 0 15px 0; }
     text-decoration: none;
 }
 .credit a:hover { text-decoration: underline; }
+
+.data-source {
+    text-align: center;
+    margin-top: 8px;
+    color: var(--text-secondary);
+    font-size: 10px;
+    opacity: 0.6;
+}
