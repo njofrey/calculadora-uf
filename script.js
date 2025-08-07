@@ -74,6 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
         resultBox.dataset.rawValue = totalClp;
     }
 
+    let copyTimeout;
+    
     resultBox.addEventListener('click', () => {
         if (resultBox.classList.contains('is-copying')) return;
         const rawValue = resultBox.dataset.rawValue;
@@ -83,11 +85,9 @@ document.addEventListener('DOMContentLoaded', () => {
             copyTextElement.textContent = 'Copiado';
             resultBox.classList.add('is-copying');
             
-            setTimeout(() => {
+            clearTimeout(copyTimeout);
+            copyTimeout = setTimeout(() => {
                 resultBox.classList.remove('is-copying');
-                setTimeout(() => {
-                    copyTextElement.textContent = '';
-                }, 300);
             }, 1500);
         }).catch(err => {
             console.error('Error al copiar: ', err);
