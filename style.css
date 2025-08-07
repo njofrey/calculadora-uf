@@ -143,22 +143,32 @@ h1 { font-size: 26px; margin: 0 0 15px 0; }
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; 
+    justify-content: center;
     height: 45px;
     position: relative;
-    min-width: 60px;
+    min-width: 50px;
+    padding: 6px 8px;
 }
 .copy-icon {
-    position: relative;
-    width: 24px;
-    height: 24px;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 18px;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+.copy-feedback:hover .copy-icon {
+    opacity: 1;
 }
 #icon-copy-wrapper, #icon-check-wrapper {
     position: absolute;
     top: 0;
     left: 0;
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
     transition: opacity 0.2s ease;
 }
 #icon-check-wrapper {
@@ -171,14 +181,15 @@ h1 { font-size: 26px; margin: 0 0 15px 0; }
     display: block;
 }
 .copy-text {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 500;
     color: var(--accent-text);
-    margin-top: 4px;
+    position: absolute;
+    top: 32px;
+    left: 50%;
+    transform: translateX(-50%);
     opacity: 0;
     transition: opacity 0.2s ease;
-    position: absolute;
-    top: 28px;
     white-space: nowrap;
 }
 .result.is-copying { animation: flash 0.4s ease-out; }
