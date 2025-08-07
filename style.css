@@ -167,10 +167,16 @@ h1 { font-size: 26px; margin: 0 0 15px 0; }
     white-space: nowrap;
 }
 .result.is-copying { animation: flash 0.5s ease; }
+.result.shake { animation: shake 0.5s ease; }
 @keyframes flash {
     0% { background-color: var(--accent-bg); }
     50% { background-color: #10b981; }
     100% { background-color: var(--accent-bg); }
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
 }
 
 @media (prefers-color-scheme: dark) {

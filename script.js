@@ -79,7 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
     resultBox.addEventListener('click', () => {
         if (resultBox.classList.contains('is-copying')) return;
         const rawValue = resultBox.dataset.rawValue;
-        if (!rawValue) return;
+        if (!rawValue || rawValue === '0') {
+            resultBox.classList.add('shake');
+            setTimeout(() => resultBox.classList.remove('shake'), 500);
+            return;
+        }
 
         navigator.clipboard.writeText(String(parseInt(rawValue, 10))).then(() => {
             copyTextElement.textContent = 'Copiado';
