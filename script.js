@@ -77,7 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        navigator.clipboard.writeText(String(parseInt(rawValue, 10))).then(() => {
+        const formattedValue = new Intl.NumberFormat('es-CL').format(parseInt(rawValue, 10));
+        navigator.clipboard.writeText(formattedValue).then(() => {
             copyTextElement.textContent = 'Copiado';
             resultBox.classList.add('is-copying');
             
