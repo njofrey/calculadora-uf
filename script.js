@@ -36,21 +36,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const iconCopy = `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>`;
     const iconCheck = `<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>`;
 
+    function showUfValue(valor) {
+        ufRate = valor;
+        const today = new Date();
+        const dateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+        const formattedDate = today.toLocaleDateString('es-CL', dateOptions);
+        const formattedUf = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(ufRate);
+        ufDisplayElement.innerHTML = `<span>UF hoy = <strong>${formattedUf}</strong></span><div class="uf-date">${formattedDate}</div>`;
+        calculate();
+    }
+
     async function getUfValue() {
+        const cached = localStorage.getItem('uf_cache');
+        if (cached) {
+            const { valor, fecha } = JSON.parse(cached);
+            if (fecha === new Date().toDateString()) showUfValue(valor);
+        }
+
         try {
-            const response = await fetch('https://mindicador.cl/api/uf');
-            if (!response.ok) throw new Error('No se pudo obtener el valor de la UF.');
-            const data = await response.json();
-            ufRate = data.serie[0].valor;
-            const today = new Date();
-            const dateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
-            const formattedDate = today.toLocaleDateString('es-CL', dateOptions);
-            const formattedUf = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(ufRate);
-            ufDisplayElement.innerHTML = `<span>UF hoy = <strong>${formattedUf}</strong></span><div class="uf-date">${formattedDate}</div>`;
-            calculate();
-        } catch (error) {
-            ufDisplayElement.textContent = 'Error al cargar valor.';
-            console.error(error);
+            const res = await fetch('/api/uf');
+            if (!res.ok) throw new Error('Proxy failed');
+            const { valor } = await res.json();
+            localStorage.setItem('uf_cache', JSON.stringify({ valor, fecha: new Date().toDateString() }));
+            showUfValue(valor);
+        } catch {
+            try {
+                const res = await fetch('https://mindicador.cl/api/uf');
+                if (!res.ok) throw new Error('Fallback failed');
+                const data = await res.json();
+                const valor = data.serie[0].valor;
+                localStorage.setItem('uf_cache', JSON.stringify({ valor, fecha: new Date().toDateString() }));
+                showUfValue(valor);
+            } catch (error) {
+                if (ufRate === 0) ufDisplayElement.textContent = 'Error al cargar valor.';
+                console.error(error);
+            }
         }
     }
 
