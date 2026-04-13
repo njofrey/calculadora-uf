@@ -26,7 +26,7 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
     background-color: var(--body-background);
     color: var(--text-primary);
     margin: 0;
@@ -63,6 +63,7 @@ h1 { font-size: 26px; margin: 0 0 15px 0; }
     color: var(--text-primary);
     font-weight: 500;
     font-size: 16px;
+    min-height: 2.75rem;
 }
 .uf-display-box .uf-date {
     display: block;
@@ -86,7 +87,7 @@ h1 { font-size: 26px; margin: 0 0 15px 0; }
     border-radius: 12px;
     font-size: 20px;
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
     background-color: var(--card-background);
     color: var(--text-primary);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
