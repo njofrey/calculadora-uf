@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const res = await fetch('/api/uf');
+            const res = await fetch('/api/uf', { signal: AbortSignal.timeout(10000) });
             if (!res.ok) throw new Error('Proxy failed');
             const { valor, fecha } = await res.json();
             try { localStorage.setItem('uf_cache', JSON.stringify({ valor, fecha, dayKey: today })); } catch {}
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (proxyError) {
             console.warn('Proxy falló, usando fallback directo:', proxyError);
             try {
-                const res = await fetch('https://mindicador.cl/api/uf', { signal: AbortSignal.timeout(5000) });
+                const res = await fetch('https://mindicador.cl/api/uf', { signal: AbortSignal.timeout(10000) });
                 if (!res.ok) throw new Error('Fallback failed');
                 const data = await res.json();
                 const valor = data?.serie?.[0]?.valor;
@@ -86,8 +86,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 try { localStorage.setItem('uf_cache', JSON.stringify({ valor, fecha, dayKey: today })); } catch {}
                 showUfValue(valor, fecha);
             } catch (fallbackError) {
-                if (ufRate === 0) ufDisplayElement.textContent = 'Error al cargar valor.';
                 console.error('Fallback también falló:', fallbackError);
+                if (cached && typeof cached.valor === 'number') {
+                    showUfValue(cached.valor, cached.fecha);
+                    const staleEl = document.createElement('div');
+                    staleEl.className = 'uf-stale';
+                    staleEl.textContent = '⚠ Valor desactualizado — servicio no disponible';
+                    ufDisplayElement.appendChild(staleEl);
+                } else if (ufRate === 0) {
+                    ufDisplayElement.textContent = 'Error al cargar valor.';
+                }
             }
         }
     }

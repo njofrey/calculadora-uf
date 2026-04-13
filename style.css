@@ -72,6 +72,16 @@ h1 { font-size: 26px; margin: 0 0 15px 0; }
     color: var(--text-secondary);
     margin-top: 4px;
 }
+.uf-display-box .uf-stale {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #d97706;
+}
+@media (prefers-color-scheme: dark) {
+    .uf-display-box .uf-stale { color: #fbbf24; }
+}
 .input-group { text-align: left; margin-bottom: 25px; }
 .input-group label {
     display: block;
