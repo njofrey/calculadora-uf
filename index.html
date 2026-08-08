@@ -22,7 +22,15 @@
             <h1>Calculadora UF a CLP</h1>
             
             <div id="uf-display" class="uf-display-box">Cargando valor...</div>
-            
+
+            <div class="date-group">
+                <label for="uf-date">Ver el valor de otro día</label>
+                <div class="date-row">
+                    <input type="date" id="uf-date" min="2013-01-01">
+                    <button type="button" id="today-btn" hidden>Hoy</button>
+                </div>
+            </div>
+
             <div class="input-group">
                 <label for="uf-input">Cantidad de UF</label>
                 <input type="text" id="uf-input" placeholder="Ej: 1,5" inputmode="decimal" pattern="[0-9.,]*">

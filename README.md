@@ -6,6 +6,7 @@ Conversor de Unidades de Fomento (UF) a Pesos Chilenos (CLP) con el valor del d�
 
 - Conversión en tiempo real mientras escribes
 - Valor de la UF actualizado diariamente vía [mindicador.cl](https://mindicador.cl)
+- Selector de fecha para consultar la UF de cualquier día desde 2013
 - Copia el resultado al portapapeles con un click
 - Formato numérico chileno (puntos como separador de miles, coma decimal)
 
@@ -24,9 +25,9 @@ Usuario abre la página
   mindicador.cl (fallback) ──→ Solo si el proxy falla
 ```
 
-- **`api/uf.js`** — Serverless function que consulta mindicador.cl y cachea la respuesta en el CDN de Vercel (`s-maxage=3600`, `stale-while-revalidate=86400`)
-- **Cron job** — Se ejecuta diariamente a las 8:00 AM (hora Chile) para pre-calentar el cache del CDN
-- **localStorage** — Guarda el último valor consultado para carga instantánea en visitas recurrentes
+- **`api/uf.js`** — Serverless function que consulta mindicador.cl y cachea la respuesta en el CDN de Vercel. El valor del día usa `s-maxage=3600` + `stale-while-revalidate=86400`; si mindicador todavía no publica el valor de hoy, baja a `s-maxage=300` para reintentar pronto. Acepta `?fecha=DD-MM-YYYY` para días pasados, que se cachean una semana porque ya no cambian.
+- **Cron job** — Corre a las 03:05 y 04:05 UTC, o sea recién pasada la medianoche en Chile en verano y en invierno. La UF cambia a medianoche, así que el cache se refresca justo cuando el valor cambia. (Antes corría a las 11:00 UTC, siete horas tarde.)
+- **localStorage** — Guarda el valor del día para carga instantánea en visitas recurrentes. Solo se guarda si la fecha del dato coincide con el día actual **en Chile**, para no dejar pegado el valor de ayer.
 
 ## Stack
 

@@ -82,6 +82,55 @@ h1 { font-size: 26px; margin: 0 0 15px 0; }
 @media (prefers-color-scheme: dark) {
     .uf-display-box .uf-stale { color: #fbbf24; }
 }
+.date-group { text-align: left; margin-bottom: 22px; }
+.date-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: var(--text-secondary);
+}
+.date-row { display: flex; gap: 8px; align-items: stretch; }
+.date-row input[type="date"] {
+    flex: 1;
+    min-width: 0;
+    padding: 9px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    box-sizing: border-box;
+    background-color: var(--card-background);
+    color: var(--text-primary);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.date-row input[type="date"]:focus {
+    outline: none;
+    border-color: var(--accent-border);
+    box-shadow: 0 0 0 3px rgba(145, 213, 255, 0.15);
+}
+.date-row button {
+    padding: 0 14px;
+    border: 1px solid var(--accent-border);
+    border-radius: 10px;
+    background-color: var(--accent-bg);
+    color: var(--accent-text);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+.date-row button:hover { opacity: 0.8; }
+.date-row button[hidden] { display: none; }
+
+@media (prefers-color-scheme: dark) {
+    .date-row input[type="date"]:focus {
+        box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.4);
+    }
+    .date-row input[type="date"] { color-scheme: dark; }
+}
+
 .input-group { text-align: left; margin-bottom: 25px; }
 .input-group label {
     display: block;
