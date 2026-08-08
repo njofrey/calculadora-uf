@@ -2,7 +2,7 @@
     "crons": [
         {
             "path": "/api/uf",
-            "schedule": "5 3,4 * * *"
+            "schedule": "5 4 * * *"
         }
     ],
     "headers": [
