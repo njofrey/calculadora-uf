@@ -7,7 +7,7 @@ Conversor de Unidades de Fomento (UF) a Pesos Chilenos (CLP) con el valor del d�
 - Conversión en tiempo real mientras escribes
 - Valor de la UF actualizado diariamente vía [mindicador.cl](https://mindicador.cl)
 - Copia el resultado al portapapeles con un click
-- Formato numérico chileno (puntos como separador de miles, coma decimal)
+- Formato numérico chileno (puntos como separador de miles, coma decimal); también acepta valores pegados con punto decimal, como `1.5`
 
 ## Arquitectura
 

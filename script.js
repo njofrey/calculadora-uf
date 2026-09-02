@@ -1,3 +1,5 @@
+import { normalizeUfInput, parseUfInput } from './input.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     const ufDisplayElement = document.getElementById('uf-display');
     const ufInputElement = document.getElementById('uf-input');
@@ -29,28 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return typeof fechaIso === 'string' ? fechaIso.slice(0, 10) : '';
     }
 
-    function parseUfInput(value) {
-        const numericString = value.replace(/\./g, '').replace(',', '.');
-        return parseFloat(numericString) || 0;
-    }
-
     ufInputElement.addEventListener('input', () => {
-        let val = ufInputElement.value;
-        val = val.replace(/\./g, '');
-        val = val.replace(/[^0-9,]/g, '');
-        const firstComma = val.indexOf(',');
-        if (firstComma !== -1) {
-            val = val.substring(0, firstComma + 1) + val.substring(firstComma + 1).replace(/,/g, '');
-        }
-        if (val.startsWith(',')) {
-            val = '0' + val;
-        }
-
-        const [rawInt, rawDec] = val.split(',');
-        let formattedInt = rawInt ? Number(rawInt).toLocaleString('es-CL') : '';
-        val = rawDec !== undefined ? (rawDec === '' ? formattedInt + ',' : `${formattedInt},${rawDec}`) : formattedInt;
-
-        ufInputElement.value = val;
+        ufInputElement.value = normalizeUfInput(ufInputElement.value);
         calculate();
     });
 
@@ -166,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const rounded = Math.round(parseFloat(rawValue));
         const formattedValue = new Intl.NumberFormat('es-CL').format(rounded);
-        navigator.clipboard.writeText(formattedValue).then(() => {
+        const confirmCopy = () => {
             copyTextElement.textContent = 'Copiado';
             resultBox.classList.add('is-copying');
 
@@ -174,9 +156,26 @@ document.addEventListener('DOMContentLoaded', () => {
             copyTimeout = setTimeout(() => {
                 resultBox.classList.remove('is-copying');
             }, 1500);
-        }).catch(err => {
-            console.error('Error al copiar: ', err);
-        });
+        };
+
+        const fallbackCopy = () => {
+            const textarea = document.createElement('textarea');
+            textarea.value = formattedValue;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            const copied = document.execCommand('copy');
+            textarea.remove();
+            if (copied) confirmCopy();
+            else console.error('No se pudo copiar el resultado');
+        };
+
+        if (navigator.clipboard?.writeText) {
+            navigator.clipboard.writeText(formattedValue).then(confirmCopy).catch(fallbackCopy);
+        } else {
+            fallbackCopy();
+        }
     }
 
     resultBox.addEventListener('click', copyResult);
