@@ -30,7 +30,7 @@ export default async function handler(req, res) {
         const esDeHoy = entry.fecha.slice(0, 10) === diaEnChile();
         res.setHeader('Cache-Control', esDeHoy
             ? 's-maxage=3600, stale-while-revalidate=86400'
-            : 's-maxage=300');
+            : 's-maxage=300, stale-while-revalidate=86400');
 
         res.status(200).json({ valor: entry.valor, fecha: entry.fecha });
     } catch (error) {

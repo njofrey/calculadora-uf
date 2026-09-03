@@ -1,54 +1,86 @@
 # Calculadora UF a CLP
 
-Conversor de Unidades de Fomento (UF) a Pesos Chilenos (CLP) con el valor del día.
+Calculadora web para convertir Unidades de Fomento (UF) a pesos chilenos (CLP) usando el valor diario publicado por [mindicador.cl](https://mindicador.cl).
+
+**Producción:** [calculadora-uf.vercel.app](https://calculadora-uf.vercel.app/)
 
 ## Funcionalidades
 
-- Conversión en tiempo real mientras escribes
-- Valor de la UF actualizado diariamente vía [mindicador.cl](https://mindicador.cl)
-- Copia el resultado al portapapeles con un click
-- Formato numérico chileno (puntos como separador de miles, coma decimal); también acepta valores pegados con punto decimal, como `1.5`
+- Conversión instantánea mientras se escribe.
+- Formato numérico chileno: `1.000,5`.
+- Admite valores pegados con punto decimal, como `1.5`.
+- Resultado redondeado a pesos y copiable al portapapeles.
+- Muestra el valor de la UF y la fecha correspondiente.
+- Conserva el último valor válido para evitar una pantalla vacía.
+- Actualiza el dato en segundo plano y señala claramente si el valor mostrado es anterior.
 
-## Arquitectura
+## Carga y actualización de la UF
 
-```
+```text
 Usuario abre la página
         │
-        ▼
-  localStorage cache ──→ Muestra valor instantáneo (0ms)
+        ├── Caché local disponible ──→ muestra el valor inmediatamente
         │
-        ▼
-  /api/uf (Vercel CDN) ──→ Actualiza valor (~50ms)
-        │
-        ▼
-  mindicador.cl (fallback) ──→ Solo si el proxy falla
+        └── Primera visita
+                │
+                ├── /api/uf (CDN de Vercel) ──┐
+                │                              ├── usa la primera respuesta válida
+                └── mindicador.cl ─────────────┘
+                                               │
+                                               └── adopta después el dato más reciente
 ```
 
-- **`api/uf.js`** — Serverless function que consulta mindicador.cl y cachea la respuesta en el CDN de Vercel. El valor del día usa `s-maxage=3600` + `stale-while-revalidate=86400`; si mindicador todavía no publica el valor de hoy, baja a `s-maxage=300` para reintentar pronto.
-- **Cron job** — Corre a las 04:05 UTC, o sea 00:05 en Chile en invierno y 01:05 en verano. La UF cambia a medianoche, así que el cache se refresca apenas cambia el valor. (Antes corría a las 11:00 UTC, siete horas tarde.) El plan Hobby permite un solo disparo diario, por eso es una hora y no dos.
-- **localStorage** — Guarda el valor del día para carga instantánea en visitas recurrentes. Solo se guarda si la fecha del dato coincide con el día actual **en Chile**, para no dejar pegado el valor de ayer.
+El navegador consulta el proxy y la fuente directa en paralelo, con un límite de cuatro segundos por solicitud. Esto evita esperar a que una ruta falle antes de iniciar la otra.
 
-## Stack
+El último dato válido se guarda en `localStorage`. Al comenzar un nuevo día, se muestra de inmediato con su fecha mientras se obtiene el valor actualizado.
 
-- HTML / CSS / JavaScript (vanilla)
-- Vercel (hosting + serverless functions + cron)
-- [mindicador.cl](https://mindicador.cl) (fuente de datos, Banco Central de Chile)
+## Caché del servidor
+
+[`api/uf.js`](api/uf.js) consulta mindicador.cl y almacena la respuesta en el CDN de Vercel:
+
+- Valor correspondiente al día actual: caché fresco durante una hora.
+- Valor anterior aún publicado por la fuente: reintento cada cinco minutos.
+- En ambos casos, Vercel puede servir el dato anterior durante 24 horas mientras revalida en segundo plano.
+
+Un cron diario solicita `/api/uf` a las `04:05 UTC` para anticipar la actualización del caché. La comprobación de fecha usa `America/Santiago`, no la zona horaria del navegador ni la del servidor.
 
 ## Desarrollo local
 
+Requisitos: Node.js y Vercel CLI.
+
 ```bash
-npx vercel login
+npm install
 npx vercel dev
 ```
 
-Abre `http://localhost:3000`
+La aplicación queda disponible normalmente en `http://localhost:3000`.
 
-## Deploy
-
-**El proyecto NO está conectado a git en Vercel.** Un push a `main` no despliega nada; hay que hacerlo a mano:
+Para ejecutar las pruebas:
 
 ```bash
-npx vercel --prod
+npm test
 ```
 
-Si algún día se conecta el repo desde el dashboard de Vercel, esto cambia y el push basta.
+## Despliegue
+
+La rama `main` está conectada con Vercel. Cada `push` a `main` genera automáticamente un nuevo despliegue de producción.
+
+## Estructura
+
+```text
+.
+├── api/uf.js          # Proxy serverless y política de caché
+├── index.html         # Interfaz
+├── input.js           # Normalización y lectura de valores UF
+├── script.js          # Consulta, caché local, cálculo y copiado
+├── style.css          # Estilos
+├── test/              # Pruebas automatizadas
+└── vercel.json        # Cabeceras y cron de Vercel
+```
+
+## Tecnologías
+
+- HTML, CSS y JavaScript sin frameworks.
+- Node.js Test Runner.
+- Vercel Functions, CDN y Cron Jobs.
+- mindicador.cl como fuente de la UF.

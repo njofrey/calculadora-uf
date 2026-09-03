@@ -52,73 +52,98 @@ document.addEventListener('DOMContentLoaded', () => {
         calculate();
     }
 
-    function avisarDesactualizado() {
+    function mostrarAviso(texto) {
         const aviso = document.createElement('div');
         aviso.className = 'uf-stale';
-        aviso.textContent = '⚠ Aún no publican el valor de hoy — este es el último disponible';
+        aviso.textContent = texto;
         ufDisplayElement.appendChild(aviso);
     }
 
-    // Solo se guarda en cache si el dato realmente corresponde al dia de hoy.
-    // Si no, se muestra marcado y no se fija, para que el proximo intento lo corrija.
-    function aplicarValorDeHoy(valor, fecha, hoy) {
+    // Guarda siempre el ultimo dato valido. Asi, al cambiar el dia, se puede
+    // mostrar inmediatamente mientras se consulta el valor nuevo.
+    function aplicarValor(valor, fecha, hoy) {
         showUfValue(valor, fecha);
-        if (diaDelDato(fecha) === hoy) {
-            try {
-                localStorage.setItem('uf_cache', JSON.stringify({ valor, fecha, dayKey: hoy }));
-            } catch {}
-        } else {
-            avisarDesactualizado();
+        try {
+            localStorage.setItem('uf_cache', JSON.stringify({
+                valor,
+                fecha,
+                dayKey: diaDelDato(fecha)
+            }));
+        } catch {}
+
+        if (diaDelDato(fecha) !== hoy) {
+            mostrarAviso('⚠ Aún no publican el valor de hoy — este es el último disponible');
         }
     }
 
     function readCache() {
-        const cached = localStorage.getItem('uf_cache');
-        if (!cached) return null;
         try {
-            return JSON.parse(cached);
+            const cached = localStorage.getItem('uf_cache');
+            if (!cached) return null;
+            const parsed = JSON.parse(cached);
+            if (typeof parsed?.valor !== 'number' || !Number.isFinite(parsed.valor) || typeof parsed?.fecha !== 'string') {
+                throw new Error('Invalid cache');
+            }
+            return parsed;
         } catch {
-            localStorage.removeItem('uf_cache');
+            try {
+                localStorage.removeItem('uf_cache');
+            } catch {}
             return null;
         }
+    }
+
+    async function pedirUf(url, transformar) {
+        const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
+        if (!res.ok) throw new Error(`UF request failed: ${res.status}`);
+        const data = transformar(await res.json());
+        if (typeof data?.valor !== 'number' || !Number.isFinite(data.valor) || typeof data?.fecha !== 'string') {
+            throw new Error('Unexpected UF response');
+        }
+        return data;
     }
 
     async function getUfValue() {
         const today = diaEnChile();
         const cached = readCache();
-        // El cache solo guarda valores ya validados como del dia, asi que
-        // si la llave coincide, el valor es confiable.
-        if (cached && cached.dayKey === today && diaDelDato(cached.fecha) === today) {
+        if (cached) {
             showUfValue(cached.valor, cached.fecha);
-            return;
+            if (diaDelDato(cached.fecha) === today) return;
+            mostrarAviso('Valor anterior — actualizando…');
         }
 
+        // Se consultan ambas rutas a la vez: un usuario nuevo no debe esperar
+        // a que el proxy agote su timeout antes de iniciar el fallback.
+        const requests = [
+            pedirUf('/api/uf', ({ valor, fecha }) => ({ valor, fecha })),
+            pedirUf('https://mindicador.cl/api/uf', (data) => ({
+                valor: data?.serie?.[0]?.valor,
+                fecha: data?.serie?.[0]?.fecha
+            }))
+        ];
+
         try {
-            const res = await fetch('/api/uf', { signal: AbortSignal.timeout(10000) });
-            if (!res.ok) throw new Error('Proxy failed');
-            const { valor, fecha } = await res.json();
-            aplicarValorDeHoy(valor, fecha, today);
-        } catch (proxyError) {
-            console.warn('Proxy falló, usando fallback directo:', proxyError);
-            try {
-                const res = await fetch('https://mindicador.cl/api/uf', { signal: AbortSignal.timeout(10000) });
-                if (!res.ok) throw new Error('Fallback failed');
-                const data = await res.json();
-                const valor = data?.serie?.[0]?.valor;
-                const fecha = data?.serie?.[0]?.fecha;
-                if (!valor || !fecha) throw new Error('Unexpected shape');
-                aplicarValorDeHoy(valor, fecha, today);
-            } catch (fallbackError) {
-                console.error('Fallback también falló:', fallbackError);
-                if (cached && typeof cached.valor === 'number') {
-                    showUfValue(cached.valor, cached.fecha);
-                    const staleEl = document.createElement('div');
-                    staleEl.className = 'uf-stale';
-                    staleEl.textContent = '⚠ Valor desactualizado — servicio no disponible';
-                    ufDisplayElement.appendChild(staleEl);
-                } else if (ufRate === 0) {
-                    ufDisplayElement.textContent = 'Error al cargar valor.';
+            const first = await Promise.any(requests);
+            aplicarValor(first.valor, first.fecha, today);
+
+            // Si la segunda fuente trae una fecha mas nueva, se usa sin volver
+            // a bloquear la interfaz.
+            Promise.allSettled(requests).then((results) => {
+                const newest = results
+                    .filter((result) => result.status === 'fulfilled')
+                    .map((result) => result.value)
+                    .sort((a, b) => diaDelDato(b.fecha).localeCompare(diaDelDato(a.fecha)))[0];
+                if (newest && diaDelDato(newest.fecha) > diaDelDato(first.fecha)) {
+                    aplicarValor(newest.valor, newest.fecha, today);
                 }
+            });
+        } catch (error) {
+            console.error('No se pudo actualizar la UF:', error);
+            if (cached) {
+                showUfValue(cached.valor, cached.fecha);
+                mostrarAviso('⚠ Valor anterior — no se pudo actualizar');
+            } else if (ufRate === 0) {
+                ufDisplayElement.textContent = 'Error al cargar valor.';
             }
         }
     }
