@@ -2,10 +2,29 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { normalizeUfInput, parseUfInput } from '../input.js';
 
-test('acepta decimales con coma o punto', () => {
+test('acepta decimales solo con coma explícita', () => {
     assert.equal(normalizeUfInput('1,5'), '1,5');
-    assert.equal(normalizeUfInput('1.5'), '1,5');
-    assert.equal(parseUfInput(normalizeUfInput('1.5')), 1.5);
+    assert.equal(parseUfInput(normalizeUfInput('1,5')), 1.5);
+});
+
+test('permite escribir cifras grandes tecla por tecla con puntos automáticos o manuales', () => {
+    for (const [typed, expected, amount] of [
+        ['14700', '14.700', 14700],
+        ['17.000', '17.000', 17000],
+        ['14700000', '14.700.000', 14700000],
+        ['14700,5', '14.700,5', 14700.5]
+    ]) {
+        let displayed = '';
+        for (const key of typed) displayed = normalizeUfInput(displayed + key);
+        assert.equal(displayed, expected);
+        assert.equal(parseUfInput(displayed), amount);
+        assert.equal(normalizeUfInput(typed), expected);
+    }
+});
+
+test('permite borrar un dígito de una cifra con miles sin crear decimales', () => {
+    assert.equal(normalizeUfInput('14.70'), '1.470');
+    assert.equal(normalizeUfInput('1.47'), '147');
 });
 
 test('conserva el formato chileno con miles', () => {

@@ -3,18 +3,10 @@ export function parseUfInput(value) {
     return parseFloat(numericString) || 0;
 }
 
-// Normaliza tanto el formato chileno (1.000,5) como valores que suelen
-// pegarse desde otros contextos (1.5). En pantalla siempre usamos coma.
+// El punto siempre separa miles; solo una coma explícita inicia decimales.
+// Esto también permite seguir escribiendo sobre los miles autoformateados.
 export function normalizeUfInput(value) {
-    let val = value.replace(/[^0-9.,]/g, '');
-    const hasComma = val.includes(',');
-    const isThousandsOnly = /^\d{1,3}(?:\.\d{3})+$/.test(val);
-
-    if (hasComma || isThousandsOnly) {
-        val = val.replace(/\./g, '');
-    } else if (val.includes('.')) {
-        val = val.replace('.', ',').replace(/\./g, '');
-    }
+    let val = value.replace(/[^0-9,]/g, '');
 
     const firstComma = val.indexOf(',');
     if (firstComma !== -1) {
