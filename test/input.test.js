@@ -11,7 +11,7 @@ test('permite escribir cifras grandes tecla por tecla con puntos automáticos o 
     for (const [typed, expected, amount] of [
         ['14700', '14.700', 14700],
         ['17.000', '17.000', 17000],
-        ['14700000', '14.700.000', 14700000],
+        ['9700000', '9.700.000', 9700000],
         ['14700,5', '14.700,5', 14700.5]
     ]) {
         let displayed = '';
@@ -39,7 +39,7 @@ test('limpia caracteres inválidos y completa el cero decimal', () => {
 });
 
 test('limita cantidades absurdamente grandes', () => {
-    assert.equal(normalizeUfInput('17.000.000.000.00'), '100.000.000');
-    assert.equal(normalizeUfInput('17.000.000.000,5'), '100.000.000,5');
+    assert.equal(normalizeUfInput('17.000.000.000.00'), '10.000.000');
+    assert.equal(normalizeUfInput('17.000.000.000,5'), '10.000.000,5');
     assert.equal(parseUfInput(normalizeUfInput('17.000.000.000.00')), MAX_UF);
 });
