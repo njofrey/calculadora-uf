@@ -9,6 +9,7 @@ Calculadora web para convertir Unidades de Fomento (UF) a pesos chilenos (CLP) u
 - Conversión instantánea mientras se escribe.
 - Formato numérico chileno: `1.000,5`.
 - Permite escribir o pegar cifras como `14700` o `17.000`: el punto separa miles y solo la coma introduce decimales.
+- Limita la cantidad máxima a `100.000.000 UF` para evitar valores absurdos y problemas de precisión.
 - Resultado redondeado a pesos y copiable al portapapeles.
 - Muestra el valor de la UF y la fecha correspondiente.
 - Conserva el último valor válido para evitar una pantalla vacía.

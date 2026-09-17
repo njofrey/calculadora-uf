@@ -1,3 +1,5 @@
+export const MAX_UF = 100_000_000;
+
 export function parseUfInput(value) {
     const numericString = value.replace(/\./g, '').replace(',', '.');
     return parseFloat(numericString) || 0;
@@ -15,7 +17,11 @@ export function normalizeUfInput(value) {
     if (val.startsWith(',')) val = '0' + val;
 
     const [rawInt, rawDec] = val.split(',');
-    const formattedInt = rawInt ? Number(rawInt).toLocaleString('es-CL') : '';
+    const integerPart = rawInt || '';
+    const cappedInteger = integerPart && BigInt(integerPart) > BigInt(MAX_UF)
+        ? String(MAX_UF)
+        : integerPart;
+    const formattedInt = cappedInteger ? Number(cappedInteger).toLocaleString('es-CL') : '';
     return rawDec !== undefined
         ? (rawDec === '' ? formattedInt + ',' : `${formattedInt},${rawDec}`)
         : formattedInt;

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { normalizeUfInput, parseUfInput } from '../input.js';
+import { MAX_UF, normalizeUfInput, parseUfInput } from '../input.js';
 
 test('acepta decimales solo con coma explícita', () => {
     assert.equal(normalizeUfInput('1,5'), '1,5');
@@ -36,4 +36,10 @@ test('conserva el formato chileno con miles', () => {
 test('limpia caracteres inválidos y completa el cero decimal', () => {
     assert.equal(normalizeUfInput('UF 12a,3'), '12,3');
     assert.equal(normalizeUfInput(',5'), '0,5');
+});
+
+test('limita cantidades absurdamente grandes', () => {
+    assert.equal(normalizeUfInput('17.000.000.000.00'), '100.000.000');
+    assert.equal(normalizeUfInput('17.000.000.000,5'), '100.000.000,5');
+    assert.equal(parseUfInput(normalizeUfInput('17.000.000.000.00')), MAX_UF);
 });
