@@ -1,4 +1,4 @@
-export const MAX_UF = 10_000_000;
+export const MAX_UF = 1_000_000;
 
 export function parseUfInput(value) {
     const numericString = value.replace(/\./g, '').replace(',', '.');
